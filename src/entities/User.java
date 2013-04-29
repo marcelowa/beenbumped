@@ -28,6 +28,7 @@ public class User {
 	
 	private String phone2;
 	
+	
 	public User(int userId, String username, String email, String password, String firstName,
 			String lastName, String city, String streetName, int houseNumber,
 			String addressDetails, int zipcode, String phone1, String phone2) {
