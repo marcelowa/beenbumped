@@ -4,7 +4,7 @@ import entities.User;
 
 public class UserDao {
 	
-	public User get(int id) {
+/*	public User get(int id) {
 		// find the user by id in the db and return a constructed user
 		
 		//return new User(userId, username, email, password, firstName, lastName, city, streetName, houseNumber, addressDetails, zipcode, phone1, phone2)
@@ -24,5 +24,5 @@ public class UserDao {
 	public boolean authenticate(User user, String password) {
 		// authenticate user password with the db
 		return false;
-	}
+	}*/
 }

@@ -1,5 +1,8 @@
 package entities;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class User {
 
 	private int userId;
@@ -48,6 +51,11 @@ public class User {
 		this.phone2 = phone2;
 	}
 
+	
+	public User() {
+		//this constructor is needed so jaxb doesn't throw an exception related to no-arg constructor
+	}
+	
 	public int getUserId() {
 		return userId;
 	}
