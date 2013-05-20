@@ -12,6 +12,5 @@ CREATE  TABLE beenbumped.Users (
 	zipcode INT NULL ,
 	phone1 VARCHAR(20) NULL ,
 	phone2 VARCHAR(20) NULL ,
-	insertDate DATETIME NOT NULL DEFAULT NOW() 
  PRIMARY KEY (userId) ,
  UNIQUE INDEX userId_UNIQUE (userId ASC));
