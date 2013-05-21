@@ -20,7 +20,6 @@ public class Person {
 	private String insuranceId;
 	
 	
-	
 	public Person(int personId, String email, String firstName,
 			String lastName, String city, String streetName, int houseNumber,
 			String addressDetails, int zipcode, String phone1, String phone2,

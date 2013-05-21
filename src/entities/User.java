@@ -6,12 +6,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class User extends Person {
 
 	private int userId;
-	
 	private String username;
-	
 	private String password;
-	
 
+	
 	public User(int userId, String username, String password, int personId, String email, String firstName,
 			String lastName, String city, String streetName, int houseNumber,
 			String addressDetails, int zipcode, String phone1, String phone2,

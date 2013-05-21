@@ -1,14 +1,23 @@
 package dao;
 
+import java.sql.Connection;
+
+import db.MySql;
+
 import entities.User;
 
 public class UserDao {
 	
-/*	public User get(int id) {
-		// find the user by id in the db and return a constructed user
-		
-		//return new User(userId, username, email, password, firstName, lastName, city, streetName, houseNumber, addressDetails, zipcode, phone1, phone2)
-		
+	static private UserDao instance = null;
+	private Connection connection;
+	
+	protected UserDao() {
+		connection = MySql.getInstance().getConnection(); 
+	}
+	
+	public User get(int id) {
+		User user = new User();
+		return user;
 	}
 	
 	public boolean create(User user) {
@@ -21,8 +30,11 @@ public class UserDao {
 		return false;
 	}
 	
-	public boolean authenticate(User user, String password) {
-		// authenticate user password with the db
-		return false;
-	}*/
+	static public UserDao getInstance() {
+		if (null == instance) {
+			instance = new UserDao();
+		}
+		return instance;
+	}
+
 }
