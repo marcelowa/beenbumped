@@ -1,4 +1,5 @@
-CREATE  TABLE beenbumped.Persons (
+DROP TABLE IF EXISTS beenbumped.Persons;
+CREATE TABLE IF NOT EXISTS beenbumped.Persons (
 	personId INT UNSIGNED NOT NULL AUTO_INCREMENT ,
 	email VARCHAR(320) NOT NULL ,
 	firstName VARCHAR(30) NOT NULL ,
@@ -15,5 +16,7 @@ CREATE  TABLE beenbumped.Persons (
 	insurancePhone1 VARCHAR(20) NULL ,
 	insurancePhone2 VARCHAR(20) NULL ,
 	insuranceId VARCHAR(20) NULL ,
+	created DATETIME NOT NULL ,
+	modified DATETIME NOT NULL ,
  PRIMARY KEY (personId) ,
  UNIQUE INDEX personId_UNIQUE (personId ASC));

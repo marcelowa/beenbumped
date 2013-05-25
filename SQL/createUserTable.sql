@@ -1,9 +1,13 @@
-CREATE  TABLE beenbumped.Users (
-	userId INT UNSIGNED NOT NULL AUTO_INCREMENT ,
-	personId INT NULL,
-	email VARCHAR(320) NOT NULL ,
+DROP TABLE IF EXISTS beenbumped.users;
+CREATE TABLE IF NOT EXISTS beenbumped.users (
+	userId INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	personId INT UNSIGNED NOT NULL,
+	email VARCHAR(320) NOT NULL,
 	userName VARCHAR(100) NOT NULL,
-	password VARCHAR(45) NOT NULL ,
- PRIMARY KEY (userId) ,
- UNIQUE INDEX userId_UNIQUE (userId ASC) ,
+	password VARCHAR(45) NOT NULL,
+	created DATETIME NOT NULL,
+	modified DATETIME NOT NULL,
+ PRIMARY KEY (userId),
+ CONSTRAINT fk_users_persons FOREIGN KEY (personId) REFERENCES persons(personId),
+ UNIQUE INDEX userId_UNIQUE (userId ASC),
  UNIQUE INDEX personId_UNIQUE (personId ASC));
