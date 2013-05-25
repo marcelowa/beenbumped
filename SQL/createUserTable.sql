@@ -1,6 +1,7 @@
 CREATE  TABLE beenbumped.Users (
 	userId INT UNSIGNED NOT NULL AUTO_INCREMENT ,
 	personId INT NULL,
+	email VARCHAR(320) NOT NULL ,
 	userName VARCHAR(100) NOT NULL,
 	password VARCHAR(45) NOT NULL ,
  PRIMARY KEY (userId) ,
