@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS beenbumped.Persons (
 	insuranceAgentName VARCHAR(64) NULL ,
 	insurancePhone1 VARCHAR(20) NULL ,
 	insurancePhone2 VARCHAR(20) NULL ,
-	insuranceId VARCHAR(20) NULL ,
+	insuranceNumber VARCHAR(20) NULL ,
 	created DATETIME NOT NULL ,
 	modified DATETIME NOT NULL ,
  PRIMARY KEY (personId) ,
