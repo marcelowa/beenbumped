@@ -20,9 +20,7 @@ CREATE PROCEDURE sp_createNewPerson (
 	IN insuranceAgentName VARCHAR(64),
 	IN insurancePhone1 VARCHAR(20),
 	IN insurancePhone2 VARCHAR(20),
-	IN insuranceNumber VARCHAR(20),
-	IN created DATETIME,
-	IN modified DATETIME
+	IN insuranceNumber VARCHAR(20)
 )
 BEGIN
 INSERT INTO beenbumped.persons (
@@ -60,8 +58,8 @@ VALUES (
 	insurancePhone1,
 	insurancePhone2,
 	insuranceNumber,
-	created,
-	modified
+	NOW(),
+	NOW()
 );
 END$$
 

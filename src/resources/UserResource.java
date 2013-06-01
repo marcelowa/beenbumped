@@ -13,8 +13,8 @@ public class UserResource {
 	 @GET
 	 @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	public User get(){
-		User user = new User(0, "stam", "stam@gmail.com", "secret", "stam", "someone", "nowhere", "somewhere", 0, "sss", 1, "sss", "sss");
-		return user;
+		//User user = new User(0, "stam", "stam@gmail.com", "secret", "stam", "someone", "nowhere", "somewhere", 0, "sss", 1, "sss", "sss");
+		return new User();
 	}
 	
 }

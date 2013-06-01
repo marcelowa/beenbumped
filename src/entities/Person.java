@@ -17,14 +17,37 @@ public class Person {
 	private String insuranceAgentName;
 	private String insurancePhone1;
 	private String insurancePhone2;
-	private String insuranceId;
+	private String insuranceNumber;
 	
+	
+	public Person(String email, String firstName,
+			String lastName, String city, String streetName, int houseNumber,
+			String addressDetails, int zipcode, String phone1, String phone2,
+			String insuranceCompany, String insuranceAgentName, String insurancePhone1,
+			String insurancePhone2, String insuranceNumber) {
+		
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.city = city;
+		this.streetName = streetName;
+		this.houseNumber = houseNumber;
+		this.addressDetails = addressDetails;
+		this.zipcode = zipcode;
+		this.phone1 = phone1;
+		this.phone2 = phone2;
+		this.insuranceCompany = insuranceCompany;
+		this.insuranceAgentName = insuranceAgentName;
+		this.insurancePhone1 = insurancePhone1;
+		this.insurancePhone2 = insurancePhone2;
+		this.insuranceNumber = insuranceNumber;
+	}
 	
 	public Person(int personId, String email, String firstName,
 			String lastName, String city, String streetName, int houseNumber,
 			String addressDetails, int zipcode, String phone1, String phone2,
 			String insuranceCompany, String insuranceAgentName, String insurancePhone1,
-			String insurancePhone2, String insuranceId) {
+			String insurancePhone2, String insuranceNumber) {
 		
 		this.personId = personId;
 		this.email = email;
@@ -41,7 +64,7 @@ public class Person {
 		this.insuranceAgentName = insuranceAgentName;
 		this.insurancePhone1 = insurancePhone1;
 		this.insurancePhone2 = insurancePhone2;
-		this.insuranceId = insuranceId;
+		this.insuranceNumber = insuranceNumber;
 	}
 
 	
@@ -174,12 +197,12 @@ public class Person {
 	}
 
 
-	public String getInsuranceId() {
-		return insuranceId;
+	public String getInsuranceNumber() {
+		return insuranceNumber;
 	}
 
 
-	public void setInsuranceId(String insuranceId) {
-		this.insuranceId = insuranceId;
+	public void setInsuranceNumber(String insuranceNumber) {
+		this.insuranceNumber = insuranceNumber;
 	}
 }

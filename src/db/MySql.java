@@ -13,10 +13,19 @@ public class MySql {
 	// protected so creation is only handled through getInstance
 	protected MySql() {
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/beenbumped?user=root&password=bitter");
-		} catch (SQLException e) {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			//Class.forName("com.mysql.jdbc.Driver");
+			try {
+				connection = DriverManager.getConnection("jdbc:mysql://localhost/beenbumped?user=root&password=bitter");
+			} catch (SQLException e) {
+				System.out.print("\ncan't get connection\n");
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			System.out.print("\ncan't get driver\n");
 			e.printStackTrace();
 		}
+
 	}
 
 	public Connection getConnection() {
