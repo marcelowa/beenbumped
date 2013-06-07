@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import db.MySql;
@@ -19,29 +20,62 @@ public class PersonDao {
 	
 	public Person get(int id) {
 		Person person = new Person();
-		return person;
+		try {
+			CallableStatement callable = connection.prepareCall("call sp_getPersonById(?)");
+			callable.setInt(1, id);
+			ResultSet result = callable.executeQuery(); 
+			if (!result.first()) {
+				return null;
+			}
+			person.setPersonId(result.getInt("personId"));
+			person.setEmail(result.getString("email"));
+			person.setFirstName(result.getString("firstName"));
+			person.setLastName(result.getString("lastName"));
+			person.setCity(result.getString("city"));
+			person.setStreetName(result.getString("streetName"));
+			person.setHouseNumber(result.getInt("houseNumber"));
+			person.setAddressDetails(result.getString("addressDetails"));
+			person.setZipcode(result.getInt("zipcode"));
+			person.setPhone1(result.getString("phone1"));
+			person.setPhone2(result.getString("phone2"));
+			person.setInsuranceCompany(result.getString("insuranceCompany"));
+			person.setInsuranceAgentName(result.getString("insuranceAgentName"));
+			person.setInsurancePhone1(result.getString("insurancePhone1"));
+			person.setInsurancePhone2(result.getString("insurancePhone2"));
+			person.setInsuranceNumber(result.getString("insuranceNumber"));
+			return person;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public boolean create(Person person) {
 		// insert the user to the db
 		try {
-			CallableStatement callable = connection.prepareCall("call sp_createNewPerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-			callable.setString(1,person.getEmail());
-			callable.setString(2,person.getFirstName());
-			callable.setString(3,person.getLastName());
-			callable.setString(4,person.getStreetName());
-			callable.setString(5,person.getCity());
-			callable.setInt(6,person.getHouseNumber());
-			callable.setString(7,person.getAddressDetails());
-			callable.setInt(8,person.getZipcode());
-			callable.setString(9,person.getPhone1());
-			callable.setString(10,person.getPhone2());
-			callable.setString(11,person.getInsuranceCompany());
-			callable.setString(12,person.getInsuranceAgentName());
-			callable.setString(13,person.getInsurancePhone1());
-			callable.setString(14,person.getInsurancePhone2());
-			callable.setString(15,person.getInsuranceNumber());
+			CallableStatement callable = connection.prepareCall("call sp_createNewPerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			int i = 0;
+			int personId;
+			callable.setString(++i,person.getEmail());
+			callable.setString(++i,person.getFirstName());
+			callable.setString(++i,person.getLastName());
+			callable.setString(++i,person.getStreetName());
+			callable.setString(++i,person.getCity());
+			callable.setInt(++i,person.getHouseNumber());
+			callable.setString(++i,person.getAddressDetails());
+			callable.setInt(++i,person.getZipcode());
+			callable.setString(++i,person.getPhone1());
+			callable.setString(++i,person.getPhone2());
+			callable.setString(++i,person.getInsuranceCompany());
+			callable.setString(++i,person.getInsuranceAgentName());
+			callable.setString(++i,person.getInsurancePhone1());
+			callable.setString(++i,person.getInsurancePhone2());
+			callable.setString(++i,person.getInsuranceNumber());
+			callable.registerOutParameter(++i, java.sql.Types.INTEGER);
 			callable.execute();
+			personId = callable.getInt(i);
+			person.setPersonId(personId);
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

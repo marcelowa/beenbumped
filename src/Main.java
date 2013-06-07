@@ -1,14 +1,13 @@
 import dao.PersonDao;
 import entities.Person;
-
-
 public class Main {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		createPerson();
+		//createPerson();
+		getPerson(2);
 	}
 	
 	
@@ -18,8 +17,15 @@ public class Main {
 		dao.create(p);
 	}
 	
-	public static void createUser() {
-		
+	public static Person getPerson(int id) {
+		PersonDao dao = PersonDao.getInstance();
+		Person p = dao.get(id);
+		System.out.println(p.getPersonId());
+		System.out.println(p.getEmail());
+		System.out.println(p.getFirstName());
+		System.out.println(p.getLastName());
+		System.out.println(p.getPhone1());
+		return p;
 	}
 
 }

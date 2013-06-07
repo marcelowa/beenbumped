@@ -20,7 +20,8 @@ CREATE PROCEDURE sp_createNewPerson (
 	IN insuranceAgentName VARCHAR(64),
 	IN insurancePhone1 VARCHAR(20),
 	IN insurancePhone2 VARCHAR(20),
-	IN insuranceNumber VARCHAR(20)
+	IN insuranceNumber VARCHAR(20),
+	OUT personId INT UNSIGNED
 )
 BEGIN
 INSERT INTO beenbumped.persons (
@@ -61,6 +62,7 @@ VALUES (
 	NOW(),
 	NOW()
 );
+SET personId = LAST_INSERT_ID();
 END$$
 
 DELIMITER ;

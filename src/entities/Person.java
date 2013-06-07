@@ -76,6 +76,10 @@ public class Person {
 		return personId;
 	}
 
+	public void setPersonId(int personId) {
+		this.personId = personId;
+	}
+	
 	public String getEmail() {
 		return email;
 	}
