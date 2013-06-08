@@ -52,11 +52,11 @@ public class PersonDao {
 	}
 	
 	public boolean create(Person person) {
-		// insert the user to the db
+		// insert the person to the db
 		try {
 			CallableStatement callable = connection.prepareCall("call sp_createNewPerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			int i = 0;
-			int personId;
+
 			callable.setString(++i,person.getEmail());
 			callable.setString(++i,person.getFirstName());
 			callable.setString(++i,person.getLastName());
@@ -74,19 +74,50 @@ public class PersonDao {
 			callable.setString(++i,person.getInsuranceNumber());
 			callable.registerOutParameter(++i, java.sql.Types.INTEGER);
 			callable.execute();
-			personId = callable.getInt(i);
+			int personId = callable.getInt(i);
 			person.setPersonId(personId);
+			return true;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
-		return true;
 	}
 	
 	public boolean update(Person person) {
-		// update the user to the db
-		return false;
+		// update the person to the db
+		try {
+			CallableStatement callable = connection.prepareCall("call sp_updatePerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			int i = 0;
+			callable.setInt(++i,person.getPersonId());
+			callable.setString(++i,person.getEmail());
+			callable.setString(++i,person.getFirstName());
+			callable.setString(++i,person.getLastName());
+			callable.setString(++i,person.getStreetName());
+			callable.setString(++i,person.getCity());
+			callable.setInt(++i,person.getHouseNumber());
+			callable.setString(++i,person.getAddressDetails());
+			callable.setInt(++i,person.getZipcode());
+			callable.setString(++i,person.getPhone1());
+			callable.setString(++i,person.getPhone2());
+			callable.setString(++i,person.getInsuranceCompany());
+			callable.setString(++i,person.getInsuranceAgentName());
+			callable.setString(++i,person.getInsurancePhone1());
+			callable.setString(++i,person.getInsurancePhone2());
+			callable.setString(++i,person.getInsuranceNumber());
+			callable.registerOutParameter(++i, java.sql.Types.INTEGER);
+			callable.execute();
+			int rowsUpdated = callable.getInt(i);
+			if (1 == rowsUpdated) {
+				return true;
+			}
+			//TODO should roll back if rowsUpdated greater then 1
+			return false;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	static public PersonDao getInstance() {
