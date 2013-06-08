@@ -1,5 +1,3 @@
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import dao.PersonDao;
 import entities.Person;
 public class Main {
