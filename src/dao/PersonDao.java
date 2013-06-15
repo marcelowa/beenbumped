@@ -4,9 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import db.MySql;
-
 import entities.Person;
 
 public class PersonDao {
@@ -18,7 +16,7 @@ public class PersonDao {
 		connection = MySql.getInstance().getConnection(); 
 	}
 	
-	public Person get(int id) {
+	public Person getById(int id) {
 		Person person = new Person();
 		try {
 			CallableStatement callable = connection.prepareCall("call sp_getPersonById(?)");
@@ -51,45 +49,20 @@ public class PersonDao {
 		}
 	}
 	
-	public boolean create(Person person) {
+	public boolean save(Person person) {
 		// insert the person to the db
 		try {
-			CallableStatement callable = connection.prepareCall("call sp_createNewPerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-			int i = 0;
 
-			callable.setString(++i,person.getEmail());
-			callable.setString(++i,person.getFirstName());
-			callable.setString(++i,person.getLastName());
-			callable.setString(++i,person.getStreetName());
-			callable.setString(++i,person.getCity());
-			callable.setInt(++i,person.getHouseNumber());
-			callable.setString(++i,person.getAddressDetails());
-			callable.setInt(++i,person.getZipcode());
-			callable.setString(++i,person.getPhone1());
-			callable.setString(++i,person.getPhone2());
-			callable.setString(++i,person.getInsuranceCompany());
-			callable.setString(++i,person.getInsuranceAgentName());
-			callable.setString(++i,person.getInsurancePhone1());
-			callable.setString(++i,person.getInsurancePhone2());
-			callable.setString(++i,person.getInsuranceNumber());
-			callable.registerOutParameter(++i, java.sql.Types.INTEGER);
-			callable.execute();
-			int personId = callable.getInt(i);
-			person.setPersonId(personId);
-			return true;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	public boolean update(Person person) {
-		// update the person to the db
-		try {
-			CallableStatement callable = connection.prepareCall("call sp_updatePerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			CallableStatement callable;
 			int i = 0;
-			callable.setInt(++i,person.getPersonId());
+			if (0 < person.getPersonId()) {
+				callable = connection.prepareCall("call sp_updatePerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				callable.setInt(++i,person.getPersonId());
+			}
+			else {
+				callable = connection.prepareCall("call sp_createPerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			}
+			
 			callable.setString(++i,person.getEmail());
 			callable.setString(++i,person.getFirstName());
 			callable.setString(++i,person.getLastName());
@@ -107,12 +80,20 @@ public class PersonDao {
 			callable.setString(++i,person.getInsuranceNumber());
 			callable.registerOutParameter(++i, java.sql.Types.INTEGER);
 			callable.execute();
-			int rowsUpdated = callable.getInt(i);
-			if (1 == rowsUpdated) {
-				return true;
+			
+			if (0 < person.getPersonId()) { // update mode
+				int rowsUpdated = callable.getInt(i);
+				if (1 != rowsUpdated) {
+					//TODO should roll back if rowsUpdated greater then 1
+					return false;
+				}
 			}
-			//TODO should roll back if rowsUpdated greater then 1
-			return false;
+			else { // insert mode
+				int personId = callable.getInt(i);
+				person.setPersonId(personId);
+			}
+			
+			return true;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

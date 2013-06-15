@@ -4,8 +4,8 @@
 -- =============================================
 DELIMITER $$
 USE beenbumped$$
-DROP PROCEDURE IF EXISTS sp_createNewPerson$$
-CREATE PROCEDURE sp_createNewPerson (
+DROP PROCEDURE IF EXISTS sp_createPerson$$
+CREATE PROCEDURE sp_createPerson (
 	IN email VARCHAR(320),
 	IN firstName VARCHAR(30),
 	IN lastName VARCHAR(30),
