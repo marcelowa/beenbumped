@@ -1,5 +1,8 @@
 package entities;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Person {
 
 	private int personId;
@@ -8,9 +11,9 @@ public class Person {
 	private String lastName;
 	private String city;
 	private String streetName;
-	private int houseNumber;
+	private int houseNumber = -1;
 	private String addressDetails;
-	private int zipcode;
+	private int zipcode = -1;
 	private String phone1;
 	private String phone2;
 	private String insuranceCompany;

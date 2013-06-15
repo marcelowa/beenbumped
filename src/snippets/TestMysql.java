@@ -13,7 +13,6 @@ public class TestMysql {
 
 	private Connection connect = null;
 	private Statement statement = null;
-	private PreparedStatement preparedStatement = null;
 	private CallableStatement callableStatement = null;
 	private ResultSet resultSet = null;
 
