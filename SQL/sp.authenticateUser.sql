@@ -9,27 +9,26 @@ CREATE PROCEDURE sp_authenticateUser (
 	IN usernameParam VARCHAR(100),
 	IN passwordParam VARCHAR(45),
 	OUT userIdResult INT UNSIGNED,
-	OUT hashResult VARCHAR(100),
-	OUT expiredResult DATETIME
+	OUT hashResult VARCHAR(100)
 )
 BEGIN
+
+SET userIdResult = 0;
+SET hashResult = "";
+
 SELECT
 	u.userId INTO userIdResult
 FROM
-	beenbumped.users as u
-WHERE u.username = usernameParam and u.password = passwordParam
+	beenbumped.users AS u
+WHERE u.username = usernameParam
+	AND u.password = passwordParam
 LIMIT 1;
 
-IF userIdResult IS NULL THEN
-	SET HashResult = NULL;
-	SET expiredResult = NULL;
-ELSE 
-	SET HashResult = password(concat(userIdResult,usernameParam,passwordParam,NOW()));
-	SET expiredResult = ADDDATE(NOW(),1);
-	INSERT INTO beenbumped.authenticate(userId, hash, expired, created, modified) VALUES(userIdResult, hashResult, expiredResult, NOW(), NOW());
+IF userIdResult > 0 THEN
+	SET hashResult = password(concat(userIdResult,usernameParam,passwordParam,NOW()));
+	INSERT INTO beenbumped.authenticate(userId, hash, expired, created, modified) VALUES(userIdResult, hashResult, ADDDATE(NOW(),1), NOW(), NOW());
 END IF;
  
-
 END$$
 
 DELIMITER ;

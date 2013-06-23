@@ -1,6 +1,7 @@
 package entities;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 public class User extends Person {
@@ -8,8 +9,8 @@ public class User extends Person {
 	private int userId;
 	private String username;
 	private String password;
+	private String authHash;
 
-	
 	public User(int userId, String username, String password, int personId, String email, String firstName,
 			String lastName, String city, String streetName, int houseNumber,
 			String addressDetails, int zipcode, String phone1, String phone2,
@@ -47,12 +48,21 @@ public class User extends Person {
 		this.username = username;
 	}
 
+	@XmlTransient
 	public String getPassword() {
 		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getAuthHash() {
+		return authHash;
+	}
+
+	public void setAuthHash(String authHash) {
+		this.authHash = authHash;
 	}
 
 }

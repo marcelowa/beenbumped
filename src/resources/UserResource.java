@@ -2,8 +2,8 @@ package resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import dao.UserDao;
 import entities.User;
@@ -12,12 +12,12 @@ import entities.User;
 public class UserResource {
 
 	@GET
-	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public User get(@PathParam("id") int id) {
-		User user = UserDao.getInstance().getById(id);
+	public User get(@QueryParam("username") String username,
+			@QueryParam("password") String password) {
+		User user = UserDao.getInstance().authenticate(username, password);
 		if (null == user) {
-			throw new RuntimeException("User::get with id " + id + " not found");
+			throw new RuntimeException("User::get wrong username or password");
 		}
 		return user;
 	}

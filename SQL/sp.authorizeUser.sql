@@ -6,7 +6,7 @@ DELIMITER $$
 USE beenbumped$$
 DROP PROCEDURE IF EXISTS sp_authorizeUser$$
 CREATE PROCEDURE sp_authorizeUser (
-	IN userIdParam VARCHAR(100),
+	IN userIdParam INT UNSIGNED,
 	IN hashParam VARCHAR(100),
 	OUT authResult BOOLEAN
 )
@@ -21,7 +21,16 @@ FROM
 WHERE
 	a.userId = userIdParam
 	AND a.hash = hashParam
-	AND NOW() < expired; 
+	AND NOW() < expired
+LIMIT 1;
+
+IF authResult = true THEN
+	UPDATE beenbumped.authenticate AS a
+	SET expired = ADDDATE(NOW(),1)
+	WHERE 
+		a.userId = userIdParam
+		AND a.hash = hashParam;
+END IF;
 
 END$$
 

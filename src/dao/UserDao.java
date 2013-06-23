@@ -30,19 +30,44 @@ public class UserDao {
 	}
 	
 	public User authenticate(String username, String password) {
-		//TODO completely change this to return an authentication object instead of a user
 		try {
-			CallableStatement callable = connection.prepareCall("call sp_getUserByUsernameAndPassword(?,?)");
+			CallableStatement callable = connection.prepareCall("call sp_authenticateUser(?,?,?,?)");
 			callable.setString(1, username);
 			callable.setString(2, password);
-			ResultSet result = callable.executeQuery(); 
-			User user = getByResult(result);
-			
+			callable.registerOutParameter(3, java.sql.Types.INTEGER);
+			callable.registerOutParameter(4, java.sql.Types.VARCHAR);
+			callable.execute(); 
+			int userId = callable.getInt("userIdResult");
+			String hashResult = callable.getString("hashResult");
+			if (0 >= userId || "" == hashResult) {
+				return null;
+			}
+			User user = getById(userId);
+			if (null == user) {
+				return null;
+			}
+			user.setAuthHash(hashResult);
 			return user;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public boolean isAuthorized(int userId, String hash) {
+		try {
+			CallableStatement callable = connection.prepareCall("call sp_authorizeUser(?,?,?)");
+			callable.setInt(1, userId);
+			callable.setString(2, hash);
+			callable.registerOutParameter(3, java.sql.Types.BOOLEAN);
+			callable.execute(); 
+			return callable.getBoolean("authResult");
+
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 	
@@ -136,48 +161,6 @@ public class UserDao {
 		}
 		return user;
 	}
-
-	/** connects to the DB and checks if the password matches the user */
-	public boolean authenticate(User user, String password) throws Exception {
-		CallableStatement callableS = null;
-		// authenticate user password with the db
-		try {
-
-			// Statements allow to issue SQL queries to the database
-			/*
-			 * Example Call: Example call: SET @uId = 1; SET @pass =
-			 * '6F9619FF-8B86-D011-B42D-00C04FC964FF'; PREPARE s FROM 'CALL
-			 * usp_userAuthentication(@uId, @pass,@result)'; EXECUTE s; SELECT
-			 * @uId, @pass,@result; )
-			 */
-			callableS = connection.prepareCall("? = call usp_userAuthentication (?,?)");
-
-			callableS.registerOutParameter(1, java.sql.Types.BOOLEAN);
-			callableS.setInt(2, user.getUserId());
-			callableS.setString(3, password);
-
-			callableS.execute();
-
-			boolean result = callableS.getBoolean(1);
-
-			return result;
-
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			if (callableS != null) {
-				callableS.close();
-			}
-		}
-	}
-
-	/*
-	 * public User get(int id) { User user = new User(); return user; } public
-	 * boolean create(User user) { // insert the user to the db return false; }
-	 * 
-	 * public boolean update(User user) { // update the user to the db return
-	 * false; }
-	 */
 
 	static public UserDao getInstance() {
 		if (null == instance) {
