@@ -29,33 +29,39 @@ CREATE PROCEDURE sp_updateUser (
 	OUT rowsUpdatedUser INT UNSIGNED
 )
 BEGIN
-call sp_updatePerson(
-	personIdParam,
-	email,
-	firstName,
-	lastName,
-	city,
-	streetName,
-	houseNumber,
-	addressDetails,
-	zipcode,
-	phone1,
-	phone2,
-	insuranceCompany,
-	insuranceAgentName,
-	insurancePhone1,
-	insurancePhone2,
-	insuranceNumber,
-	rowsUpdatedPerson
-);
 
 UPDATE beenbumped.users SET
 	username				= username,
 	password				= password,
 	modified				= NOW()
 WHERE
-	userId					= userIdParam;
+	userId					= userIdParam
+	AND personId			= personIdParam;
+
 SET rowsUpdatedUser = ROW_COUNT();
+
+if rowsUpdatedUser = 1 THEN
+	call sp_updatePerson(
+		personIdParam,
+		email,
+		firstName,
+		lastName,
+		city,
+		streetName,
+		houseNumber,
+		addressDetails,
+		zipcode,
+		phone1,
+		phone2,
+		insuranceCompany,
+		insuranceAgentName,
+		insurancePhone1,
+		insurancePhone2,
+		insuranceNumber,
+		rowsUpdatedPerson
+	);
+END IF;
+
 END$$
 
 DELIMITER ;

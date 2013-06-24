@@ -77,7 +77,9 @@ public class UserDao {
 
 			CallableStatement callable;
 			int i = 0;
+			boolean updateMode = false;
 			if (0 < user.getUserId() && 0 < user.getPersonId()) {
+				updateMode = true;
 				callable = connection.prepareCall("call sp_updateUser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				callable.setInt(++i,user.getPersonId());
 				callable.setInt(++i,user.getUserId());
@@ -107,7 +109,7 @@ public class UserDao {
 			callable.registerOutParameter(++i, java.sql.Types.INTEGER);
 			callable.execute();
 			
-			if (0 < user.getUserId() && 0 < user.getPersonId()) { // update mode
+			if (updateMode) { // update mode
 				int rowsUpdatedPerson = callable.getInt(i-1);
 				int rowsUpdatedUser = callable.getInt(i);
 				if (1 != rowsUpdatedPerson || 1 != rowsUpdatedUser) {

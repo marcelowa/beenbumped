@@ -23,7 +23,7 @@ public class PersonResource {
 	@GET
 	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Person get(@PathParam("id") int id) {
+	public Person getById(@PathParam("id") int id) {
 		Person person = PersonDao.getInstance().getById(id);
 		if (null == person) {
 			throw new RuntimeException("Person::get with id " + id
