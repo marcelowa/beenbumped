@@ -13,7 +13,7 @@ CREATE PROCEDURE sp_authenticateUser (
 )
 BEGIN
 
-SET userIdResult = -1;
+SET userIdResult = 0;
 SET hashResult = "";
 
 SELECT
