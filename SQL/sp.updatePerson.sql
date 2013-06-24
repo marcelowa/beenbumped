@@ -22,14 +22,14 @@ CREATE PROCEDURE sp_updatePerson (
 	IN insurancePhone1 VARCHAR(20),
 	IN insurancePhone2 VARCHAR(20),
 	IN insuranceNumber VARCHAR(20),
-	OUT rowsUpdated INT UNSIGNED
+	OUT rowsUpdatedOut INT UNSIGNED
 )
 BEGIN
-UPDATE beenbumped.persons SET
-	email					= email,
+UPDATE beenbumped.t_persons SET
+	email						= email,
 	firstName				= firstName,
-	lastName				= lastName,
-	city					= city,
+	lastName					= lastName,
+	city						= city,
 	streetName				= streetName,
 	houseNumber				= houseNumber,
 	addressDetails			= addressDetails,
@@ -37,14 +37,14 @@ UPDATE beenbumped.persons SET
 	phone1					= phone1,
 	phone2					= phone2,
 	insuranceCompany		= insuranceCompany,
-	insuranceAgentName		= insuranceAgentName,
-	insurancePhone1			= insurancePhone1,
-	insurancePhone2			= insurancePhone2,
-	insuranceNumber			= insuranceNumber,
-	modified				= NOW()
+	insuranceAgentName	= insuranceAgentName,
+	insurancePhone1		= insurancePhone1,
+	insurancePhone2		= insurancePhone2,
+	insuranceNumber		= insuranceNumber,
+	modified					= NOW()
 WHERE
-	personId				= personIdParam;
-SET rowsUpdated = ROW_COUNT();
+	personId					= personIdParam;
+SET rowsUpdatedOut 		= ROW_COUNT();
 END$$
 
 DELIMITER ;

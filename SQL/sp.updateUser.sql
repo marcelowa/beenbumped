@@ -25,22 +25,22 @@ CREATE PROCEDURE sp_updateUser (
 	IN insuranceNumber VARCHAR(20),
 	IN username VARCHAR(100),
 	IN password VARCHAR(45),
-	OUT rowsUpdatedPerson INT UNSIGNED,
-	OUT rowsUpdatedUser INT UNSIGNED
+	OUT rowsUpdatedPersonOut INT UNSIGNED,
+	OUT rowsUpdatedUserOut INT UNSIGNED
 )
 BEGIN
 
-UPDATE beenbumped.users SET
+UPDATE beenbumped.t_users SET
 	username				= username,
 	password				= password,
 	modified				= NOW()
 WHERE
-	userId					= userIdParam
-	AND personId			= personIdParam;
+	userId				= userIdParam
+	AND personId		= personIdParam;
 
-SET rowsUpdatedUser = ROW_COUNT();
+SET rowsUpdatedUserOut = ROW_COUNT();
 
-if rowsUpdatedUser = 1 THEN
+if rowsUpdatedUserOut = 1 THEN
 	call sp_updatePerson(
 		personIdParam,
 		email,
@@ -58,7 +58,7 @@ if rowsUpdatedUser = 1 THEN
 		insurancePhone1,
 		insurancePhone2,
 		insuranceNumber,
-		rowsUpdatedPerson
+		rowsUpdatedPersonOut
 	);
 END IF;
 

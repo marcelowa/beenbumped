@@ -37,8 +37,8 @@ public class UserDao {
 			callable.registerOutParameter(3, java.sql.Types.INTEGER);
 			callable.registerOutParameter(4, java.sql.Types.VARCHAR);
 			callable.execute(); 
-			int userId = callable.getInt("userIdResult");
-			String hashResult = callable.getString("hashResult");
+			int userId = callable.getInt("userIdOut");
+			String hashResult = callable.getString("hashResultOut");
 			if (0 >= userId || "" == hashResult) {
 				return null;
 			}
@@ -62,7 +62,7 @@ public class UserDao {
 			callable.setString(2, hash);
 			callable.registerOutParameter(3, java.sql.Types.BOOLEAN);
 			callable.execute(); 
-			return callable.getBoolean("authResult");
+			return callable.getBoolean("authResultOut");
 
 		}
 		catch (SQLException e) {
@@ -85,7 +85,7 @@ public class UserDao {
 				callable.setInt(++i,user.getUserId());
 			}
 			else {
-				callable = connection.prepareCall("call sp_createUser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				callable = connection.prepareCall("call sp_createUser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			}
 			
 			callable.setString(++i,user.getEmail());
@@ -105,23 +105,28 @@ public class UserDao {
 			callable.setString(++i,user.getInsuranceNumber());
 			callable.setString(++i,user.getUsername());
 			callable.setString(++i,user.getPassword()); //TODO password should be md5ed before inserting or updating
-			callable.registerOutParameter(++i, java.sql.Types.INTEGER);
-			callable.registerOutParameter(++i, java.sql.Types.INTEGER);
+			callable.registerOutParameter(++i, java.sql.Types.INTEGER); // register personIdOut or rowsUpdatedPersonOut (if in updateMode)
+			callable.registerOutParameter(++i, java.sql.Types.INTEGER); // register userIdOut or rowsUpdatedUserOut (if in updateMode)
+			if (!updateMode) {
+				callable.registerOutParameter(++i, java.sql.Types.VARCHAR); // register authHashOut
+			}
 			callable.execute();
 			
 			if (updateMode) { // update mode
-				int rowsUpdatedPerson = callable.getInt(i-1);
-				int rowsUpdatedUser = callable.getInt(i);
+				int rowsUpdatedPerson = callable.getInt("rowsUpdatedPersonOut");
+				int rowsUpdatedUser = callable.getInt("rowsUpdatedUserOut");
 				if (1 != rowsUpdatedPerson || 1 != rowsUpdatedUser) {
 					//TODO should roll back if rowsUpdated greater then 1
 					return false;
 				}
 			}
 			else { // insert mode
-				int personId = callable.getInt(i-1);
-				int userId = callable.getInt(i);
+				int personId = callable.getInt("personIdOut");
+				int userId = callable.getInt("userIdOut");
+				String authHash = callable.getString("authHashOut");
 				user.setUserId(userId);
 				user.setPersonId(personId);
+				user.setAuthHash(authHash);
 			}
 			
 			return true;

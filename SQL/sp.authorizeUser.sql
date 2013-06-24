@@ -8,28 +8,28 @@ DROP PROCEDURE IF EXISTS sp_authorizeUser$$
 CREATE PROCEDURE sp_authorizeUser (
 	IN userIdParam INT UNSIGNED,
 	IN hashParam VARCHAR(100),
-	OUT authResult BOOLEAN
+	OUT authResultOut BOOLEAN
 )
 BEGIN
 
-SET authResult = false;
+SET authResultOut = false;
 
 SELECT
-	true INTO authResult
+	true INTO authResultOut
 FROM
-	beenbumped.authenticate AS a
+	beenbumped.t_authenticate AS a
 WHERE
 	a.userId = userIdParam
-	AND a.hash = hashParam
+	AND a.authHash = hashParam
 	AND NOW() < expired
 LIMIT 1;
 
-IF authResult = true THEN
-	UPDATE beenbumped.authenticate AS a
+IF authResultOut = true THEN
+	UPDATE beenbumped.t_authenticate AS a
 	SET expired = ADDDATE(NOW(),1)
 	WHERE 
 		a.userId = userIdParam
-		AND a.hash = hashParam;
+		AND a.authHash = hashParam;
 END IF;
 
 END$$

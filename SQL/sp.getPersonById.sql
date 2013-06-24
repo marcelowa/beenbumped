@@ -29,7 +29,7 @@ SELECT
 	created,
 	modified
 FROM
-	beenbumped.persons 
+	beenbumped.t_persons 
 WHERE personId = personIdParam;
 
 END$$

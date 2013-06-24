@@ -21,10 +21,10 @@ CREATE PROCEDURE sp_createPerson (
 	IN insurancePhone1 VARCHAR(20),
 	IN insurancePhone2 VARCHAR(20),
 	IN insuranceNumber VARCHAR(20),
-	OUT personId INT UNSIGNED
+	OUT personIdOut INT UNSIGNED
 )
 BEGIN
-INSERT INTO beenbumped.persons (
+INSERT INTO beenbumped.t_persons (
 	email,
 	firstName,
 	lastName,
@@ -62,7 +62,7 @@ VALUES (
 	NOW(),
 	NOW()
 );
-SET personId = LAST_INSERT_ID();
+SET personIdOut = LAST_INSERT_ID();
 END$$
 
 DELIMITER ;

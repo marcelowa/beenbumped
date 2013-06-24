@@ -16,6 +16,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+
+
 import dao.UserDao;
 import entities.User;
 
@@ -45,6 +47,7 @@ public class UserResource {
 		if (null == user) {
 			throw new RuntimeException("User::get with id " + id + " not found");
 		}
+		user.setAuthHash(authHash);
 		return user;
 	}
 	
@@ -77,11 +80,9 @@ public class UserResource {
 			@FormParam("authHash") @DefaultValue("") String authHash
 			) throws Exception {
 		
-		boolean updateMode = false;
 		UserDao userDao = UserDao.getInstance();
 		User user = new User();
 		if (personId > 0 && userId >0) { // if we know the userId and personId it means we intend to update a user, therefore check if authorized to make such a change
-			updateMode = true;
 			if (!userDao.isAuthorized(userId, authHash)) {
 				throw new RuntimeException("User::save (update) unathorized, reason:mismatch userId, authHash");
 			}
@@ -110,12 +111,8 @@ public class UserResource {
 		user.setUsername(username);
 		user.setPassword(password); //TODO hash the password before persisting to the database 
 		
-		if (!userDao.save(user)){
-			throw new Exception("User was not saved succesfully");
-		}
-		
-		if (!updateMode) { // we only need to authenticate if we are in saveMode (saveMode == not updateMode)
-			user = userDao.authenticate(user.getUsername(), user.getPassword());
+		if (!userDao.save(user) || 0 >= user.getUserId() || "" == user.getAuthHash()) {
+			throw new ResourceException("user not saved", "", 400 , 400);
 		}
 		
 		URI userUri = uriInfo.getBaseUriBuilder().path(UserResource.class).path("/" + user.getUserId()).queryParam("authHash", user.getAuthHash()).build();

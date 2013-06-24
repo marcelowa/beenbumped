@@ -23,10 +23,19 @@ CREATE PROCEDURE sp_createUser (
 	IN insuranceNumber VARCHAR(20),
 	IN username VARCHAR(100),
 	IN password VARCHAR(45),
-	OUT personId INT UNSIGNED,
-	OUT userId INT UNSIGNED
+	OUT personIdOut INT UNSIGNED,
+	OUT userIdOut INT UNSIGNED,
+	OUT authHashOut VARCHAR(100)
 )
 BEGIN
+
+SET personIdOut	= 0;
+SET userIdOut		= 0;
+SET authHashOut	= "";
+
+DECLARE EXIT HANDLER FOR SQLEXCEPTION ROLLBACK;
+START TRANSACTION;
+
 call sp_createPerson(
 	email,
 	firstName,
@@ -43,10 +52,10 @@ call sp_createPerson(
 	insurancePhone1,
 	insurancePhone2,
 	insuranceNumber,
-	personId
+	personIdOut
 );
 
-INSERT INTO beenbumped.users (
+INSERT INTO beenbumped.t_users (
 	personId,
 	username,
 	password,
@@ -54,13 +63,16 @@ INSERT INTO beenbumped.users (
 	modified
 )
 VALUES (
-	personId,
+	personIdOut,
 	username,
 	password,
 	NOW(),
 	NOW()
 );
-SET userId = LAST_INSERT_ID();
+
+call sp_authenticateUser(username, password, userIdOut, authHashOut);
+COMMIT;
+
 END$$
 
 DELIMITER ;

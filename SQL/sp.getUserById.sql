@@ -32,8 +32,8 @@ SELECT
 	u.created,
 	u.modified
 FROM
-	beenbumped.users as u
-	LEFT JOIN beenbumped.persons as p ON u.personId = p.personId
+	beenbumped.t_users as u
+	LEFT JOIN beenbumped.t_persons as p ON u.personId = p.personId
 WHERE u.userId = userIdParam;
 
 END$$

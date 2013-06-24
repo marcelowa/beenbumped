@@ -8,25 +8,25 @@ DROP PROCEDURE IF EXISTS sp_authenticateUser$$
 CREATE PROCEDURE sp_authenticateUser (
 	IN usernameParam VARCHAR(100),
 	IN passwordParam VARCHAR(45),
-	OUT userIdResult INT UNSIGNED,
-	OUT hashResult VARCHAR(100)
+	OUT userIdOut INT UNSIGNED,
+	OUT hashResultOut VARCHAR(100)
 )
 BEGIN
 
-SET userIdResult = 0;
-SET hashResult = "";
+SET userIdOut = 0;
+SET hashResultOut = "";
 
 SELECT
-	u.userId INTO userIdResult
+	u.userId INTO userIdOut
 FROM
-	beenbumped.users AS u
+	beenbumped.t_users AS u
 WHERE u.username = usernameParam
 	AND u.password = passwordParam
 LIMIT 1;
 
-IF userIdResult > 0 THEN
-	SET hashResult = password(concat(userIdResult,usernameParam,passwordParam,NOW()));
-	INSERT INTO beenbumped.authenticate(userId, hash, expired, created, modified) VALUES(userIdResult, hashResult, ADDDATE(NOW(),1), NOW(), NOW());
+IF userIdOut > 0 THEN
+	SET hashResultOut = password(concat(userIdOut,usernameParam,passwordParam,NOW()));
+	INSERT INTO beenbumped.t_authenticate(userId, authHash, expired, created, modified) VALUES(userIdOut, hashResultOut, ADDDATE(NOW(),1), NOW(), NOW());
 END IF;
  
 END$$
