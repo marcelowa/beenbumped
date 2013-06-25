@@ -23,7 +23,6 @@ CREATE PROCEDURE sp_updateUser (
 	IN insurancePhone1 VARCHAR(20),
 	IN insurancePhone2 VARCHAR(20),
 	IN insuranceNumber VARCHAR(20),
-	IN username VARCHAR(100),
 	IN password VARCHAR(45),
 	OUT rowsUpdatedPersonOut INT UNSIGNED,
 	OUT rowsUpdatedUserOut INT UNSIGNED
@@ -31,7 +30,6 @@ CREATE PROCEDURE sp_updateUser (
 BEGIN
 
 UPDATE beenbumped.t_users SET
-	username				= username,
 	password				= password,
 	modified				= NOW()
 WHERE

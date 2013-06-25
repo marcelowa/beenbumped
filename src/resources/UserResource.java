@@ -26,11 +26,11 @@ public class UserResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public User get(@QueryParam("username") String username,
+	public User authenticate(@QueryParam("username") String username,
 			@QueryParam("password") String password) {
 		User user = UserDao.getInstance().authenticate(username, password);
 		if (null == user) {
-			throw new RuntimeException("User::get wrong username or password");
+			throw new ResourceException("User::get wrong username or password", "", 400, 400);
 		}
 		return user;
 	}
@@ -45,7 +45,7 @@ public class UserResource {
 		}
 		User user = userDao.getById(id);
 		if (null == user) {
-			throw new RuntimeException("User::get with id " + id + " not found");
+			throw new ResourceException("User::get with id " + id + " not found", "", 400, 400);
 		}
 		user.setAuthHash(authHash);
 		return user;
@@ -58,16 +58,16 @@ public class UserResource {
 			@Context UriInfo uriInfo,
 			@Context HttpServletRequest servletRequest,
 			@Context HttpServletResponse servletResponse,
-			@FormParam("personId") @DefaultValue("-1") int personId,
-			@FormParam("userId") @DefaultValue("-1") int userId,
+			@FormParam("personId") @DefaultValue("-1") String personId,  // validate integer
+			@FormParam("userId") @DefaultValue("-1") String userId,  // validate integer
 			@FormParam("email") @DefaultValue("") String email ,
 			@FormParam("firstName") @DefaultValue("") String firstName,
 			@FormParam("lastName") @DefaultValue("") String lastName,
 			@FormParam("city") @DefaultValue("") String city,
 			@FormParam("streetName") @DefaultValue("") String streetName,
-			@FormParam("houseNumber") @DefaultValue("-1") int houseNumber,
+			@FormParam("houseNumber") @DefaultValue("-1") String houseNumber,  // validate integer
 			@FormParam("addressDetails") @DefaultValue("") String addressDetails,
-			@FormParam("zipcode") @DefaultValue("-1") int zipcode,
+			@FormParam("zipcode") @DefaultValue("-1") String zipcode, // validate integer
 			@FormParam("phone1") @DefaultValue("") String phone1,
 			@FormParam("phone2") @DefaultValue("") String phone2,
 			@FormParam("insuranceCompany") @DefaultValue("") String insuranceCompany,
@@ -79,15 +79,32 @@ public class UserResource {
 			@FormParam("password") @DefaultValue("") String password,
 			@FormParam("authHash") @DefaultValue("") String authHash
 			) throws Exception {
+
+		// validate input:
+		int personIdOk, userIdOk, houseNumberOk, zipcodeOk;
+		try {
+			personIdOk = Integer.parseInt(personId);
+			userIdOk = Integer.parseInt(userId);
+			houseNumberOk = Integer.parseInt(houseNumber);
+			zipcodeOk = Integer.parseInt(zipcode);
+		}
+		catch(Exception e) {
+			throw new ResourceException("user not saved, one of the following is not an int (personId, userId, houseNumber, zipcode)", "", 400 , 400);
+		}
+		
+		if (username == "") {
+			throw new ResourceException("user not saved, username is missing)", "", 400 , 400);
+		}
 		
 		UserDao userDao = UserDao.getInstance();
 		User user = new User();
-		if (personId > 0 && userId >0) { // if we know the userId and personId it means we intend to update a user, therefore check if authorized to make such a change
-			if (!userDao.isAuthorized(userId, authHash)) {
-				throw new RuntimeException("User::save (update) unathorized, reason:mismatch userId, authHash");
+		
+		if (personIdOk > 0 && userIdOk > 0) { // if we know the userId and personId it means we intend to update a user, therefore check if authorized to make such a change
+			if (!userDao.isAuthorized(userIdOk, authHash)) {
+				throw new ResourceException("user not updated, reason:mismatch userId, authHash", "", 400, 400);
 			}
-			user.setPersonId(personId);
-			user.setUserId(userId);
+			user.setPersonId(personIdOk);
+			user.setUserId(userIdOk);
 			user.setAuthHash(authHash);
 		}
 	
@@ -97,10 +114,10 @@ public class UserResource {
 		user.setCity(city);
 		user.setStreetName(streetName);
 		//TODO handle better integers, it crushes the application if non integer string is passed here
-		user.setHouseNumber(houseNumber);
+		user.setHouseNumber(houseNumberOk);
 		user.setAddressDetails(addressDetails);
 		//TODO handle better integers, it crushes the application if non integer string is passed here
-		user.setZipcode(zipcode);
+		user.setZipcode(zipcodeOk);
 		user.setPhone1(phone1);
 		user.setPhone2(phone2);
 		user.setInsuranceCompany(insuranceCompany);
