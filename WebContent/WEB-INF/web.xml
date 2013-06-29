@@ -17,4 +17,13 @@
 		<servlet-name>Been Bumped API</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
+	 <servlet>
+        <servlet-name>Beenbumped Client</servlet-name>
+        <servlet-class>controllers.Beenbumped</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Beenbumped Client</servlet-name>
+        <url-pattern>/client/*</url-pattern>
+    </servlet-mapping>
 </web-app>

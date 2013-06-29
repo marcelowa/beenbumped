@@ -2,7 +2,8 @@ package resources;
 
 public class ResourceException extends RuntimeException {
 
-    private String reason;
+	private static final long serialVersionUID = 3222518051740261790L;
+	private String reason;
     private int statusCode;
     private int errorCode;
 
