@@ -41,7 +41,7 @@ public class UserResource {
 	public User getById(@PathParam("id") int id, @QueryParam("authHash") String authHash) {
 		UserDao userDao = UserDao.getInstance();
 		if (!userDao.isAuthorized(id, authHash)){
-			throw new RuntimeException("User::getById unathorized, reason:mismatch userId, authHash");
+			throw new RuntimeException("User::getById unauthorized, reason:mismatch userId, authHash");
 		}
 		User user = userDao.getById(id);
 		if (null == user) {
