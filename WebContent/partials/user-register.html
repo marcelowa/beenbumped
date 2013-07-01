@@ -1,20 +1,20 @@
 <div>
-<form name="user-form" class="form-horizontal">
+<form name="user-form" class="form-horizontal" >
 	<input type="hidden" ng-model="user.userId" name="user-id" id="user-id">
 	<input type="hidden" ng-model="user.personId" name="person-id" id="person-id">
 	<input type="hidden" ng-model="user.authHash" name="auth-hash" id="auth-hash">
 	<div class="control-group">
 		<label class="control-label" for="username">Email</label>
 		<div class="controls">
-			<input type="text" ng-model="user.username" name="username" id="username">
-			<input type="text" ng-model="user.email" name="email" id="email">
+			<input type="email" ng-model="user.username" name="username" id="username" required>
+			<input type="email" ng-model="user.email" name="email" id="email" required>
 		</div>
 	</div>
 	<div class="control-group">
 		<label class="control-label" for="password">Password</label>
 		<div class="controls">
-			<input type="text" ng-model="user.password" name="password">
-			<input type="text" ng-model="user.passwordRepeat" name="password-repeat" id="password-repeat">
+			<input type="text" ng-model="user.password" name="password" required >
+			<input type="text" ng-model="user.passwordConfirm" name="password-confirm" id="password-confirm" required >
 		</div>
 	</div>
 	
@@ -118,7 +118,7 @@
 	
 	<div class="control-group">
 		<div class="controls">
-			<button class="btn" ng-click="register(user)">register</button>
+			<button class="btn" ng-click="register(user)" ng-disabled="form.$invalid || isInvalid(user)">Register</button>
 		</div>
 	</div>
 </form>
