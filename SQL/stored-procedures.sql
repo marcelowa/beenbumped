@@ -252,7 +252,7 @@ CREATE PROCEDURE sp_updateUser (
 	IN addressDetails VARCHAR(64),
 	IN zipcode INT,
 	IN phone1 VARCHAR(20),
-	IN phone2 VARCHAR(20) ,
+	IN phone2 VARCHAR(20),
 	IN insuranceCompany VARCHAR(64),
 	IN insuranceAgentName VARCHAR(64),
 	IN insurancePhone1 VARCHAR(20),

@@ -5,7 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=100" />
 <meta charset="utf-8" />
 <title>Beenbumped Application Client</title>
-<link rel="stylesheet" href="/beenbumped/css/normalize.css">
+<link rel="stylesheet" href="/beenbumped/css/bootstrap.css">
+<link rel="stylesheet" href="/beenbumped/css/bootstrap-responsive.css">
 <script src="//code.jquery.com/jquery-2.0.0.min.js"></script>
 <script src="/beenbumped/js/angular/angular.min.js"></script>
 <script src="/beenbumped/js/angular/angular-resource.min.js"></script>
@@ -15,6 +16,6 @@
 <script src="/beenbumped/js/app.js"></script>
 </head>
 <body>
-<div ng-view></div>
+<div class="container" ng-view></div>
 </body>
 </html>
