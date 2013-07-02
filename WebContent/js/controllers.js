@@ -56,6 +56,6 @@ function UserRegisterCtrl($scope, $location, User) {
 	
 }
 
-function UserEditCtrl($scope, $routeParams, $cookies) {
+function UserEditCtrl($scope, $routeParams) {
 
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('beenbumped', ['beenbumpedServices', 'ngResource', 'ngCookies']).
+angular.module('beenbumped', ['beenbumpedServices', 'ngResource']).
 config(['$routeProvider','$locationProvider', function($routeProvider, $locationProvider) {
 	$routeProvider
 		.when('/menu', {templateUrl: 'partials/menu.html', controller: MenuCtrl})
