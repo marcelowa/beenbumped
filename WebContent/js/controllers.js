@@ -1,27 +1,26 @@
 'use strict';
 
-function MenuCtrl($scope) {
-
+function MenuCtrl($scope, registry) {
+	$scope.user = registry.fetch('user') || {};
+	console.log($scope.user);
 }
 
-function UserLoginCtrl($scope, $location, User) {
+function UserLoginCtrl($scope, $location, $filter, User, registry) {
 	$scope.login = {};
 	
 	$scope.authenticate = function(login) {
 		$scope.user = User.get({username: login.username, password: login.password}, function(response){
-			console.log(response);
-			console.log($scope.user);
-			//TODO store userid and hash in cookies or in service for next controller
+			registry.store('user', $scope.user);
+			$.cookie('login', $filter('json')({userId:$scope.user.userId, authHash: $scope.user.authHash}), { expires: 1 });
+			$location.path("/menu");
 		}, function(response){
 			console.error(response);
 			//TODO show failure in login form
 		});
-		//console.log($scope.user);
-		//$location.path("/user/register");
 	};
 }
 
-function UserRegisterCtrl($scope, $location, User) {
+function UserRegisterCtrl($scope, $location, $filter, User, registry) {
 	$scope.user = {
 		username : "marc@walla.com",
 		email : "marc@walla.com",
@@ -31,12 +30,12 @@ function UserRegisterCtrl($scope, $location, User) {
 	
 	$scope.register = function(user) {
 		$scope.user = User.save(user, function(response){
-			console.log(response);
-			console.log($scope.user);
-			//TODO store userid and hash in cookies or in service for next controller
+			registry.store('user', $scope.user);
+			$.cookie('login', $filter('json')({userId:$scope.user.userId, authHash: $scope.user.authHash}), { expires: 1 });
+			$location.path("/menu");
 		}, function(response){
 			console.error(response);
-			//TODO show failure in login form
+			//TODO show failure in register form
 		});
 	};
 	
