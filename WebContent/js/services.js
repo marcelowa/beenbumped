@@ -10,12 +10,13 @@ angular.module("beenbumpedServices", ["ngResource"]).config(function ($httpProvi
     };
     $httpProvider.defaults.headers.put["Content-Type"] = $httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8";
 }).factory("User", function($resource, $http){
-	return $resource("/beenbumped/rest/user");
+	return $resource("/beenbumped/rest/user/:userId");
 }).factory('registry', function() {
 	var store = [];
 	return {
-		fetch : function(key) {
-			return store[key] || null;
+		fetch : function(key, defaultValue) {
+			defaultValue = defaultValue || null;
+			return store[key] || defaultValue;
 		},
 		store : function(key, value) {
 			store[key] = value;

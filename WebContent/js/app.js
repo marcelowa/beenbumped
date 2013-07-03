@@ -7,7 +7,7 @@ config(['$routeProvider','$locationProvider', function($routeProvider, $location
 		.when('/user/login', {templateUrl: 'partials/user-login.html', controller: UserLoginCtrl})
 		.when('/user/register', {templateUrl: 'partials/user-register.html', controller: UserRegisterCtrl})
 		.when('/user/edit', {templateUrl: 'partials/user-edit.html', controller: UserEditCtrl})
-		.otherwise({redirectTo: '/user/login'});
+		.otherwise({redirectTo: '/menu'});
 	
 	$locationProvider.hashPrefix('!');
 }]);
