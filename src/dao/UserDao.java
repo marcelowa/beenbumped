@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import db.MySql;
+import entities.ResourceError;
 import entities.User;
 
 public class UserDao {
@@ -24,7 +25,10 @@ public class UserDao {
 			return getByResult(result);
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			ResourceError err = ResourceError.getInstance();
+			err.setMessage("internal error");
+			err.setStatusCode(500);
+			err.setReasonCode(ResourceError.REASON_UNKNOWN);
 			return null;
 		}
 	}
@@ -40,17 +44,32 @@ public class UserDao {
 			int userId = callable.getInt("userIdOut");
 			String hashResult = callable.getString("hashResultOut");
 			if (0 >= userId || "" == hashResult) {
+				ResourceError err = ResourceError.getInstance();
+				err.setMessage("authentication failed, wrong username or password");
+				err.setStatusCode(400);
+				err.setReasonCode(ResourceError.REASON_AUTHENTICATION_FAILED);
 				return null;
 			}
 			User user = getById(userId);
 			if (null == user) {
+				ResourceError err = ResourceError.getInstance();
+				if (!err.isSet()) {
+					err.setMessage("user retrieval failed with provided input");
+					err.setStatusCode(400);
+					err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
+				}
 				return null;
 			}
 			user.setAuthHash(hashResult);
 			return user;
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			ResourceError err = ResourceError.getInstance();
+			if (!err.isSet()) {
+				err.setMessage("internal error");
+				err.setStatusCode(500);
+				err.setReasonCode(ResourceError.REASON_UNKNOWN);
+			}
 			return null;
 		}
 	}
@@ -66,7 +85,12 @@ public class UserDao {
 
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			ResourceError err = ResourceError.getInstance();
+			if (!err.isSet()) {
+				err.setMessage("internal error");
+				err.setStatusCode(500);
+				err.setReasonCode(ResourceError.REASON_UNKNOWN);
+			}
 			return false;
 		}
 	}
@@ -117,8 +141,14 @@ public class UserDao {
 			if (updateMode) { // update mode
 				int rowsUpdatedPerson = callable.getInt("rowsUpdatedPersonOut");
 				int rowsUpdatedUser = callable.getInt("rowsUpdatedUserOut");
+				//TODO should roll back if rowsUpdated greater then 1
 				if (1 != rowsUpdatedPerson || 1 != rowsUpdatedUser) {
-					//TODO should roll back if rowsUpdated greater then 1
+					ResourceError err = ResourceError.getInstance();
+					if (!err.isSet()) {
+						err.setMessage("user update failed, invalid input");
+						err.setStatusCode(400);
+						err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
+					}
 					return false;
 				}
 			}
@@ -134,7 +164,12 @@ public class UserDao {
 			return true;
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			ResourceError err = ResourceError.getInstance();
+			if (!err.isSet()) {
+				err.setMessage("internal error");
+				err.setStatusCode(500);
+				err.setReasonCode(ResourceError.REASON_UNKNOWN);
+			}
 			return false;
 		}
 	}
@@ -143,6 +178,10 @@ public class UserDao {
 		User user = new User();
 		try {
 			if (!result.first()) {
+				ResourceError err = ResourceError.getInstance();
+				err.setMessage("user retrieval failed with provided input");
+				err.setStatusCode(400);
+				err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
 				return null;
 			}
 			user.setUserId(result.getInt("userId"));
@@ -165,7 +204,10 @@ public class UserDao {
 			user.setInsurancePhone2(result.getString("insurancePhone2"));
 			user.setInsuranceNumber(result.getString("insuranceNumber"));
 		} catch (SQLException e) {
-			e.printStackTrace();
+			ResourceError err = ResourceError.getInstance();
+			err.setMessage("internal error");
+			err.setStatusCode(500);
+			err.setReasonCode(ResourceError.REASON_UNKNOWN);
 			return null;
 		}
 		return user;
