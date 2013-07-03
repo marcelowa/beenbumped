@@ -19,6 +19,7 @@ import javax.ws.rs.core.UriInfo;
 
 
 import dao.UserDao;
+import entities.ResourceError;
 import entities.User;
 
 @Path("/user")
@@ -30,7 +31,13 @@ public class UserResource {
 			@QueryParam("password") String password) {
 		User user = UserDao.getInstance().authenticate(username, password);
 		if (null == user) {
-			throw new ResourceException("User::get wrong username or password", "", 400, 400);
+			ResourceError err = ResourceError.getInstance();
+			if (!err.isSet()) {
+				err.setMessage("unable to get user");
+				err.setStatusCode(500);
+				err.setReasonCode(ResourceError.REASON_UNKNOWN);
+			}
+			throw new ResourceException(err);
 		}
 		return user;
 	}
@@ -41,11 +48,21 @@ public class UserResource {
 	public User getById(@PathParam("id") int id, @QueryParam("authHash") String authHash) {
 		UserDao userDao = UserDao.getInstance();
 		if (!userDao.isAuthorized(id, authHash)){
-			throw new RuntimeException("User::getById unauthorized, reason:mismatch userId, authHash");
+			ResourceError err = ResourceError.getInstance();
+			err.setMessage("unauthorized reason:mismatch userId, authHash");
+			err.setStatusCode(400);
+			err.setReasonCode(ResourceError.REASON_AUTHENTICATION_FAILED);
+			throw new ResourceException(err);
 		}
 		User user = userDao.getById(id);
 		if (null == user) {
-			throw new ResourceException("User::get with id " + id + " not found", "", 400, 400);
+			ResourceError err = ResourceError.getInstance();
+			if (!err.isSet()) {
+				err.setMessage("unable to get user");
+				err.setStatusCode(500);
+				err.setReasonCode(ResourceError.REASON_UNKNOWN);
+			}
+			throw new ResourceException(err);
 		}
 		user.setAuthHash(authHash);
 		return user;
@@ -89,11 +106,22 @@ public class UserResource {
 			zipcodeOk = Integer.parseInt(zipcode);
 		}
 		catch(Exception e) {
-			throw new ResourceException("user not saved, one of the following is not an int (personId, userId, houseNumber, zipcode)", "", 400 , 400);
+			
+			ResourceError err = ResourceError.getInstance();
+			if (!err.isSet()) {
+				err.setMessage("user not saved, one of the following is not an int (personId, userId, houseNumber, zipcode)");
+				err.setStatusCode(400);
+				err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
+			}
+			throw new ResourceException(err);
 		}
 		
 		if (username == "") {
-			throw new ResourceException("user not saved, username is missing)", "", 400 , 400);
+			ResourceError err = ResourceError.getInstance();
+			err.setMessage("user not saved, username is missing)");
+			err.setStatusCode(400);
+			err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
+			throw new ResourceException(err);
 		}
 		
 		UserDao userDao = UserDao.getInstance();
@@ -101,7 +129,13 @@ public class UserResource {
 		
 		if (personIdOk > 0 && userIdOk > 0) { // if we know the userId and personId it means we intend to update a user, therefore check if authorized to make such a change
 			if (!userDao.isAuthorized(userIdOk, authHash)) {
-				throw new ResourceException("user not updated, reason:mismatch userId, authHash", "", 400, 400);
+				ResourceError err = ResourceError.getInstance();
+				if (!err.isSet()) {
+					err.setMessage("user not updated, reason:mismatch userId, authHash");
+					err.setStatusCode(400);
+					err.setReasonCode(ResourceError.REASON_AUTHENTICATION_FAILED);
+				}
+				throw new ResourceException(err);
 			}
 			user.setPersonId(personIdOk);
 			user.setUserId(userIdOk);
@@ -129,7 +163,13 @@ public class UserResource {
 		user.setPassword(password); //TODO hash the password before persisting to the database 
 		
 		if (!userDao.save(user) || 0 >= user.getUserId() || "" == user.getAuthHash()) {
-			throw new ResourceException("user not saved", "", 400 , 400);
+			ResourceError err = ResourceError.getInstance();
+			if (!err.isSet()) {
+				err.setMessage("user not saved");
+				err.setStatusCode(500);
+				err.setReasonCode(ResourceError.REASON_UNKNOWN);
+			}
+			throw new ResourceException(err);
 		}
 		
 		URI userUri = uriInfo.getBaseUriBuilder().path(UserResource.class).path("/" + user.getUserId()).queryParam("authHash", user.getAuthHash()).build();
