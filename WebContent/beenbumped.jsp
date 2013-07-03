@@ -4,6 +4,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=100" />
 <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Beenbumped Application Client</title>
 <link rel="stylesheet" href="/beenbumped/lib/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" href="/beenbumped/lib/bootstrap/css/bootstrap-responsive.css">

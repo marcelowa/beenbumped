@@ -1,8 +1,6 @@
 <div>
+<h1>Create User</h1>
 <form name="user-form" class="form-horizontal" >
-	<input type="hidden" ng-model="user.userId" name="user-id" id="user-id">
-	<input type="hidden" ng-model="user.personId" name="person-id" id="person-id">
-	<input type="hidden" ng-model="user.authHash" name="auth-hash" id="auth-hash">
 	<div class="control-group">
 		<label class="control-label" for="username">Email</label>
 		<div class="controls">
@@ -118,7 +116,8 @@
 	
 	<div class="control-group">
 		<div class="controls">
-			<button class="btn" ng-click="register(user)" ng-disabled="form.$invalid || isInvalid(user)">Register</button>
+			<button class="btn" ng-click="save(user)" ng-disabled="form.$invalid || isInvalid(user)">Save</button>
+			<button class="btn" ng-click="cancel()" >Cancel</button>
 		</div>
 	</div>
 </form>

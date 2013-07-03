@@ -104,7 +104,7 @@ public class UserDao {
 			boolean updateMode = false;
 			if (0 < user.getUserId() && 0 < user.getPersonId()) {
 				updateMode = true;
-				callable = connection.prepareCall("call sp_updateUser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				callable = connection.prepareCall("call sp_updateUser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				callable.setInt(++i,user.getPersonId());
 				callable.setInt(++i,user.getUserId());
 			}
@@ -129,8 +129,8 @@ public class UserDao {
 			callable.setString(++i,user.getInsuranceNumber());
 			if (!updateMode) { // pass username to the sp only if we are saving it in the first time
 				callable.setString(++i,user.getUsername());
+				callable.setString(++i,user.getPassword()); //TODO password should be md5ed before inserting or updating
 			}
-			callable.setString(++i,user.getPassword()); //TODO password should be md5ed before inserting or updating
 			callable.registerOutParameter(++i, java.sql.Types.INTEGER); // register personIdOut or rowsUpdatedPersonOut (if in updateMode)
 			callable.registerOutParameter(++i, java.sql.Types.INTEGER); // register userIdOut or rowsUpdatedUserOut (if in updateMode)
 			if (!updateMode) {

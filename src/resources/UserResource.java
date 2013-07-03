@@ -116,18 +116,19 @@ public class UserResource {
 			throw new ResourceException(err);
 		}
 		
-		if (username == "") {
-			ResourceError err = ResourceError.getInstance();
-			err.setMessage("user not saved, username is missing)");
-			err.setStatusCode(400);
-			err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
-			throw new ResourceException(err);
-		}
-		
 		UserDao userDao = UserDao.getInstance();
 		User user = new User();
 		
-		if (personIdOk > 0 && userIdOk > 0) { // if we know the userId and personId it means we intend to update a user, therefore check if authorized to make such a change
+		if (personIdOk <= 0 || userIdOk <= 0) { // if we dont't know the userId or personId it means we intend to create a new user
+			if (username == "" || password == "") { // therefor verify that username and password are not empty
+				ResourceError err = ResourceError.getInstance();
+				err.setMessage("user not saved, username or password is missing)");
+				err.setStatusCode(400);
+				err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
+				throw new ResourceException(err);
+			}
+		}
+		else  { // check if authorized to make a change to the user 
 			if (!userDao.isAuthorized(userIdOk, authHash)) {
 				ResourceError err = ResourceError.getInstance();
 				if (!err.isSet()) {

@@ -258,22 +258,20 @@ CREATE PROCEDURE sp_updateUser (
 	IN insurancePhone1 VARCHAR(20),
 	IN insurancePhone2 VARCHAR(20),
 	IN insuranceNumber VARCHAR(20),
-	IN password VARCHAR(45),
 	OUT rowsUpdatedPersonOut INT UNSIGNED,
 	OUT rowsUpdatedUserOut INT UNSIGNED
 )
 BEGIN
 
-UPDATE beenbumped.t_users SET
-	password				= password,
-	modified				= NOW()
+SET rowsUpdatedUserOut = 0;
+
+SELECT COUNT(u.userID) INTO rowsUpdatedUserOut
+FROM beenbumped.t_users AS u
 WHERE
-	userId				= userIdParam
-	AND personId		= personIdParam;
+	u.userId				= userIdParam
+	AND u.personId		= personIdParam;
 
-SET rowsUpdatedUserOut = ROW_COUNT();
-
-if rowsUpdatedUserOut = 1 THEN
+IF rowsUpdatedUserOut = 1 THEN
 	call sp_updatePerson(
 		personIdParam,
 		email,

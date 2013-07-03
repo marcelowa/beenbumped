@@ -37,6 +37,8 @@ function UserLoginCtrl($scope, $location, User, registry) {
 }
 
 function UserRegisterCtrl($scope, $location, $filter, User, registry) {
+	$.cookie('login', "" , {expires: -1});
+	registry.store('user', null);
 	$scope.user = {
 		username : "marc@walla.com",
 		email : "marc@walla.com",
@@ -44,7 +46,7 @@ function UserRegisterCtrl($scope, $location, $filter, User, registry) {
 		passwordConfirm : "stamstam"
 	};
 	
-	$scope.register = function(user) {
+	$scope.save = function(user) {
 		$scope.user = User.save(user, function(response){
 			registry.store('user', $scope.user);
 			$.cookie('login', angular.toJson({userId:$scope.user.userId, authHash: $scope.user.authHash}), { expires: 1 });
@@ -53,6 +55,10 @@ function UserRegisterCtrl($scope, $location, $filter, User, registry) {
 			console.error(response);
 			//TODO show failure in register form
 		});
+	};
+	
+	$scope.cancel = function() {
+		$location.path("/user/login");
 	};
 	
 	$scope.isInvalid = function(user) {
@@ -71,6 +77,30 @@ function UserRegisterCtrl($scope, $location, $filter, User, registry) {
 	
 }
 
-function UserEditCtrl($scope, $routeParams) {
-
+function UserEditCtrl($scope, $location, $filter, User, registry) {
+	
+	$scope.user = registry.fetch('user', null);
+	console.log($scope.user);
+	if (!$scope.user) {
+		return $location.path("/user/login");
+	}
+	
+	$scope.save = function(user) {
+		$scope.user = User.save(user, function(response){
+			//registry.store('user', $scope.user);
+			//$.cookie('login', angular.toJson({userId:$scope.user.userId, authHash: $scope.user.authHash}), { expires: 1 });
+			$location.path("/menu");
+		}, function(response){
+			console.error(response);
+			//TODO show failure in edit form
+		});
+	};
+	
+	$scope.cancel = function() {
+		$location.path("/user/menu");
+	};
+	
+	$scope.isInvalid = function(user) {
+		return false;
+	};
 }
