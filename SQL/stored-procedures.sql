@@ -403,7 +403,7 @@ END$$
 DELIMITER ;
 
 -- =============================================
--- Description: Create a new user
+-- Description: Create a new incident
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
 DELIMITER $$
@@ -455,6 +455,46 @@ VALUES (
 	NOW()
 );
 
+
 COMMIT;
+END$$
+DELIMITER ;
+
+-- =============================================
+-- Description: Update an existing incident
+-- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
+-- =============================================
+DELIMITER $$
+USE beenbumped$$
+CREATE PROCEDURE sp_updateIncident (
+	IN incidentIdParam INT UNSIGNED,
+	IN userIdParam INT UNSIGNED,
+	IN date DATETIME,
+	IN notes TEXT,
+	IN location VARCHAR(128),
+	IN vehicleLicensePlate VARCHAR(64),
+	IN vehicleBrand VARCHAR(64),
+	IN vehicleModel VARCHAR(64),
+	IN driverPersonId INT UNSIGNED,
+	IN ownerPersonId INT UNSIGNED,
+	OUT rowsUpdatedOut INT UNSIGNED
+)
+BEGIN
+SET rowsUpdatedOut = 0;
+
+UPDATE beenbumped.t_incidents SET
+	date						= date,
+	location					= location,
+	vehicleLicensePlate	= vehicleLicensePlate,
+	vehicleBrand			= vehicleBrand,
+	vehicleModel			= vehicleModel,
+	driverPersonId			= driverPersonId,
+	ownerPersonId			= ownerPersonId,
+	modified					= NOW()
+WHERE
+	incidentId				= incidentIdParam
+	AND userId				= userIdParam;
+SET rowsUpdatedOut 		= ROW_COUNT();
+
 END$$
 DELIMITER ;
