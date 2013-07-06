@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS beenbumped.authenticate;
 DROP TABLE IF EXISTS beenbumped.t_users;
 DROP TABLE IF EXISTS beenbumped.t_persons;
 DROP TABLE IF EXISTS beenbumped.t_authenticate;
+DROP TABLE IF EXISTS beenbumped.t_incidents;
 
 CREATE TABLE IF NOT EXISTS beenbumped.t_persons (
 	personId INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -52,3 +53,19 @@ CREATE TABLE IF NOT EXISTS beenbumped.t_authenticate (
 	modified DATETIME NOT NULL,
  PRIMARY KEY (authId),
  UNIQUE INDEX authId_UNIQUE (authId ASC));
+ 
+ CREATE TABLE IF NOT EXISTS beenbumped.t_incidents (
+	incidentId INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	userId INT UNSIGNED NOT NULL,
+	date DATETIME NOT NULL,
+	notes TEXT,
+	location VARCHAR(64),
+	vehicleLicensePlate VARCHAR(64),
+	vehicleBrand VARCHAR(64),
+	vehicleModel VARCHAR(64),
+	driverPersonId INT UNSIGNED,
+	ownerPersonId INT UNSIGNED,
+	created DATETIME NOT NULL,
+	modified DATETIME NOT NULL,
+ PRIMARY KEY (incidentId),
+ UNIQUE INDEX incidentId_UNIQUE (incidentId ASC));

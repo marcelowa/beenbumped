@@ -10,25 +10,26 @@ public class Incident {
 	private int incidentId;
 	private int userId;
 	private Calendar date;
-	private int satausId;
-	private String location;
 	private String notes;
+	private String location;
+	private String vehicleLicensePlate;
+	private String vehicleBrand;
+	private String vehicleModel;
 	private Person driver;
-	private Person vehicleOwner;
+	private Person owner;
 	
 	
-	public Incident(int incidentId, int userId, Calendar date, int satausId,
+	public Incident(int incidentId, int userId, Calendar date,
 			String location, String notes, Person driver,
-			Person vehicleOwner) {
+			Person owner) {
 		
 		this.incidentId = incidentId;
 		this.userId = userId;
 		this.date = date;
-		this.satausId = satausId;
 		this.location = location;
 		this.notes = notes;
 		this.driver = driver;
-		this.vehicleOwner = vehicleOwner;
+		this.owner = owner;
 	}
 
 	public Incident() {
@@ -59,14 +60,6 @@ public class Incident {
 		this.date = date;
 	}
 
-	public int getSatausId() {
-		return satausId;
-	}
-
-	public void setSatausId(int satausId) {
-		this.satausId = satausId;
-	}
-
 	public String getLocation() {
 		return location;
 	}
@@ -83,6 +76,30 @@ public class Incident {
 		this.notes = notes;
 	}
 
+	public String getVehicleLicensePlate() {
+		return vehicleLicensePlate;
+	}
+
+	public void setVehicleLicensePlate(String vehicleLicensePlate) {
+		this.vehicleLicensePlate = vehicleLicensePlate;
+	}
+
+	public String getVehicleBrand() {
+		return vehicleBrand;
+	}
+
+	public void setVehicleBrand(String vehicleBrand) {
+		this.vehicleBrand = vehicleBrand;
+	}
+
+	public String getVehicleModel() {
+		return vehicleModel;
+	}
+
+	public void setVehicleModel(String vehicleModel) {
+		this.vehicleModel = vehicleModel;
+	}
+	
 	public Person getDriver() {
 		return driver;
 	}
@@ -91,14 +108,11 @@ public class Incident {
 		this.driver = driver;
 	}
 
-	public Person getVehicleOwner() {
-		return vehicleOwner;
+	public Person getOwner() {
+		return owner;
 	}
 
-	public void setVehicleOwner(Person vehicleOwner) {
-		this.vehicleOwner = vehicleOwner;
+	public void setOwner(Person owner) {
+		this.owner = owner;
 	}
-	
-	
-	
 }
