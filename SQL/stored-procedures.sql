@@ -416,88 +416,16 @@ CREATE PROCEDURE sp_createIncident (
 	IN vehicleLicensePlate VARCHAR(64),
 	IN vehicleBrand VARCHAR(64),
 	IN vehicleModel VARCHAR(64),
-	IN driverEmail VARCHAR(320),
-	IN driverFirstName VARCHAR(30),
-	IN driverLastName VARCHAR(30),
-	IN driverCity VARCHAR(30),
-	IN driverStreetName VARCHAR(50),
-	IN driverHouseNumber SMALLINT,
-	IN driverAddressDetails VARCHAR(64),
-	IN driverZipcode INT,
-	IN driverPhone1 VARCHAR(20),
-	IN driverPhone2 VARCHAR(20) ,
-	IN driverInsuranceCompany VARCHAR(64),
-	IN driverInsuranceAgentName VARCHAR(64),
-	IN driverInsurancePhone1 VARCHAR(20),
-	IN driverInsurancePhone2 VARCHAR(20),
-	IN driverInsuranceNumber VARCHAR(20),
-	IN ownerEmail VARCHAR(320),
-	IN ownerFirstName VARCHAR(30),
-	IN ownerLastName VARCHAR(30),
-	IN ownerCity VARCHAR(30),
-	IN ownerStreetName VARCHAR(50),
-	IN ownerHouseNumber SMALLINT,
-	IN ownerAddressDetails VARCHAR(64),
-	IN ownerZipcode INT,
-	IN ownerPhone1 VARCHAR(20),
-	IN ownerPhone2 VARCHAR(20) ,
-	IN ownerInsuranceCompany VARCHAR(64),
-	IN ownerInsuranceAgentName VARCHAR(64),
-	IN ownerInsurancePhone1 VARCHAR(20),
-	IN ownerInsurancePhone2 VARCHAR(20),
-	IN ownerInsuranceNumber VARCHAR(20),
-	OUT driverPersonIdOut INT UNSIGNED,
-	OUT ownerPersonIdOut INT UNSIGNED,
+	IN driverPersonId INT UNSIGNED,
+	IN ownerPersonId INT UNSIGNED,
 	OUT incidentIdOut INT UNSIGNED
 )
 BEGIN
 DECLARE EXIT HANDLER FOR SQLEXCEPTION ROLLBACK;
 
-SET driverPersonIdOut	= 0;
-SET ownerPersonIdOut		= 0;
-SET incidentIdOut			= 0;
+SET incidentIdOut = 0;
 
 START TRANSACTION;
-
--- create driver person
-call sp_createPerson(
-	driverEmail,
-	driverFirstName,
-	driverLastName,
-	driverCity,
-	driverStreetName,
-	driverHouseNumber,
-	driverAddressDetails,
-	driverZipcode,
-	driverPhone1,
-	driverPhone2,
-	driverInsuranceCompany,
-	driverInsuranceAgentName,
-	driverInsurancePhone1,
-	driverInsurancePhone2,
-	driverInsuranceNumber,
-	driverPersonIdOut
-);
-
--- create vehicle person
-call sp_createPerson(
-	ownerEmail,
-	ownerFirstName,
-	ownerLastName,
-	ownerCity,
-	ownerStreetName,
-	ownerHouseNumber,
-	ownerAddressDetails,
-	ownerZipcode,
-	ownerPhone1,
-	ownerPhone2,
-	ownerInsuranceCompany,
-	ownerInsuranceAgentName,
-	ownerInsurancePhone1,
-	ownerInsurancePhone2,
-	ownerInsuranceNumber,
-	ownerPersonIdOut
-);
 
 -- create incident
 INSERT INTO beenbumped.t_incidents (
@@ -508,8 +436,8 @@ INSERT INTO beenbumped.t_incidents (
 	vehicleLicensePlate,
 	vehicleBrand,
 	vehicleModel,
-	incidentPersonId,
-	vehiclePersonId,
+	driverPersonId,
+	ownerPersonId,
 	created,
 	modified
 )
