@@ -132,7 +132,7 @@ public class UserResource {
 			if (!userDao.isAuthorized(userIdOk, authHash)) {
 				ResourceError err = ResourceError.getInstance();
 				if (!err.isSet()) {
-					err.setMessage("user not updated, reason:mismatch userId, authHash");
+					err.setMessage("user not save, reason:authorization failed");
 					err.setStatusCode(400);
 					err.setReasonCode(ResourceError.REASON_AUTHENTICATION_FAILED);
 				}
