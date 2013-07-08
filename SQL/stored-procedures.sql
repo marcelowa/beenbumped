@@ -7,6 +7,7 @@ DROP PROCEDURE IF EXISTS sp_getUserById;
 DROP PROCEDURE IF EXISTS sp_authenticateUser;
 DROP PROCEDURE IF EXISTS sp_authorizeUser;
 DROP PROCEDURE IF EXISTS sp_createIncident;
+DROP PROCEDURE IF EXISTS sp_updateIncident;
 
 -- =============================================
 -- Description: Create a new person
