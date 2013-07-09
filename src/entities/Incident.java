@@ -1,7 +1,6 @@
 package entities;
 
-import java.util.Calendar;
-
+import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -9,7 +8,7 @@ public class Incident {
 	
 	private int incidentId;
 	private int userId;
-	private Calendar date;
+	private Date date;
 	private String notes;
 	private String location;
 	private String vehicleLicensePlate;
@@ -19,10 +18,7 @@ public class Incident {
 	private Person owner;
 	
 	
-	public Incident(int incidentId, int userId, Calendar date,
-			String location, String notes, Person driver,
-			Person owner) {
-		
+	public Incident(int incidentId, int userId, Date date,String location, String notes, Person driver, Person owner) {
 		this.incidentId = incidentId;
 		this.userId = userId;
 		this.date = date;
@@ -52,11 +48,11 @@ public class Incident {
 		this.userId = userId;
 	}
 
-	public Calendar getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(Calendar date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 

@@ -457,6 +457,7 @@ VALUES (
 	NOW()
 );
 
+SET incidentIdOut = LAST_INSERT_ID();
 
 COMMIT;
 END$$
@@ -527,5 +528,6 @@ FROM
 	beenbumped.t_incidents
 WHERE incidentId = incidentIdParam
 	AND userId = userIdParam;
+
 END$$
 DELIMITER ;

@@ -1,8 +1,4 @@
 -- create tables
-DROP TABLE IF EXISTS beenbumped.users;
-DROP TABLE IF EXISTS beenbumped.persons;
-DROP TABLE IF EXISTS beenbumped.authenticate;
-
 DROP TABLE IF EXISTS beenbumped.t_users;
 DROP TABLE IF EXISTS beenbumped.t_persons;
 DROP TABLE IF EXISTS beenbumped.t_authenticate;

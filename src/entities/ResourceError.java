@@ -43,7 +43,7 @@ public class ResourceError {
 	}
 
 	public boolean isSet() {
-		return getStatusCode() == 0;
+		return getStatusCode() != 0;
 	}
 	
 	static public ResourceError getInstance() {

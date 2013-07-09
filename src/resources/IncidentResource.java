@@ -1,23 +1,22 @@
 package resources;
 
 import java.net.URI;
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import dao.IncidentDao;
-import dao.PersonDao;
 import dao.UserDao;
 import entities.Incident;
 import entities.Person;
@@ -26,6 +25,54 @@ import entities.ResourceError;
 @Path("/incident")
 public class IncidentResource {
 
+	
+	@GET
+	@Path("{id}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Incident getById(
+			@PathParam("id") @DefaultValue("-1") String incidentId
+			, @QueryParam("userId") @DefaultValue("-1") String userId
+			, @QueryParam("authHash") @DefaultValue("") String authHash) {
+		//return new Incident();
+		IncidentDao incidentDao = IncidentDao.getInstance();
+		UserDao userDao = UserDao.getInstance();
+		ResourceError err = ResourceError.getInstance();
+		int userIdOk, incidentIdOk;
+		
+		// validate input:
+		try {
+			userIdOk = Integer.parseInt(userId);
+			incidentIdOk = Integer.parseInt(incidentId);
+		}
+		catch(Exception e) {
+			if (!err.isSet()) {
+				err.setMessage("invalid input, one of the following is not an int (userId, incidentId)");//, driverPersonId, ownerPersonId)");
+				err.setStatusCode(400);
+				err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
+			}
+			throw new ResourceException(err);
+		}
+		
+		if (!userDao.isAuthorized(userIdOk, authHash)){
+			err.setMessage("unauthorized reason:mismatch userId, authHash");
+			err.setStatusCode(400);
+			err.setReasonCode(ResourceError.REASON_AUTHENTICATION_FAILED);
+			throw new ResourceException(err);
+		}
+		
+		Incident incident = incidentDao.getById(incidentIdOk, userIdOk);
+		if (null == incident) {
+			if (!err.isSet()) {
+				err.setMessage("unable to get incident");
+				err.setStatusCode(500);
+				err.setReasonCode(ResourceError.REASON_UNKNOWN);
+			}
+			throw new ResourceException(err);
+		}
+		
+		return incident;
+	}
+	
 	@POST
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -42,7 +89,7 @@ public class IncidentResource {
 			@FormParam("authHash") @DefaultValue("") String authHash,
 			
 			// incident data
-			@FormParam("date") @DefaultValue("") String date,
+			@FormParam("date") @DefaultValue("0") String date,
 			@FormParam("notes") @DefaultValue("") String notes,
 			@FormParam("location") @DefaultValue("") String location,
 			@FormParam("vehicleLicensePlate") @DefaultValue("") String vehicleLicensePlate,
@@ -77,49 +124,69 @@ public class IncidentResource {
 			
 			) throws Exception {
 
+		// declarations
+		IncidentDao incidentDao = IncidentDao.getInstance();
+		UserDao userDao = UserDao.getInstance();
+		ResourceError err = ResourceError.getInstance();
+		Person driver = new Person();
+		Person owner = new Person();
+		Incident incident = new Incident();
+		int userIdOk, incidentIdOk, dateOk; //, driverPersonIdOk, ownerPersonIdOk;
+		
 		// validate input:
-		int userIdOk, incidentIdOk; //, driverPersonIdOk, ownerPersonIdOk;
 		try {
 			userIdOk = Integer.parseInt(userId);
 			incidentIdOk = Integer.parseInt(incidentId);
-			//driverPersonIdOk = Integer.parseInt(driverPersonId);
-			//ownerPersonIdOk = Integer.parseInt(ownerPersonId);
+			dateOk = Integer.parseInt(date);
 		}
 		catch(Exception e) {
-			
-			ResourceError err = ResourceError.getInstance();
 			if (!err.isSet()) {
-				err.setMessage("incident not saved, one of the following is not an int (userId, incidentId)");//, driverPersonId, ownerPersonId)");
+				err.setMessage("incident not saved, one of the following is not an int (userId, incidentId, date)");//, driverPersonId, ownerPersonId)");
 				err.setStatusCode(400);
 				err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
 			}
 			throw new ResourceException(err);
 		}
 		
-		UserDao userDao = UserDao.getInstance();
 		
+		// check if user is authorized to save an incident
 		if (!userDao.isAuthorized(userIdOk, authHash)) {
-			ResourceError err = ResourceError.getInstance();
 			if (!err.isSet()) {
-				err.setMessage("incident not save, reason:authorization failed");
+				err.setMessage("incident not saved, reason:authorization failed");
 				err.setStatusCode(400);
 				err.setReasonCode(ResourceError.REASON_AUTHENTICATION_FAILED);
 			}
 			throw new ResourceException(err);
 		}
 		
-		PersonDao personDao = PersonDao.getInstance();
-		Person driver = new Person();
-		Person owner = new Person();
-		Incident incident = new Incident();
-		incident.setUserId(userIdOk);
-		
 		if (incidentIdOk > 0) {
-			//TODO fetch real incident and set Incident, Person,Driver instead of initiating a new ones
-			//TODO  also check that the incident actually belongs to that userId
+			incident = incidentDao.getById(incidentIdOk, userIdOk);
+
+			if (null == incident) {
+				if (!err.isSet()) {
+					err.setMessage("unable to save incident");
+					err.setStatusCode(500);
+					err.setReasonCode(ResourceError.REASON_UNKNOWN);
+				}
+				throw new ResourceException(err);
+			}
+			
+			
+			Person driverTmp = incident.getDriver();
+			Person ownerTmp = incident.getOwner();
+			
+			if (null != driverTmp) {
+				driver = driverTmp;
+			}
+			if (null != ownerTmp) {
+				owner = ownerTmp;
+			}
+		}
+		else {
+			incident.setUserId(userIdOk);
 		}
 		
-		//incident.setDate(date); //TODO convert the date to calendar and set it
+		incident.setDate(new Date(dateOk));
 		incident.setLocation(location);
 		incident.setNotes(notes);
 		incident.setVehicleLicensePlate(vehicleLicensePlate);
@@ -149,15 +216,6 @@ public class IncidentResource {
 			driver.setInsurancePhone2(driverInsurancePhone2);
 			driver.setInsuranceNumber(driverInsuranceNumber);
 			
-			if (!personDao.save(driver) || 0 >= driver.getPersonId()) {
-				ResourceError err = ResourceError.getInstance();
-				if (!err.isSet()) {
-					err.setMessage("incident not saved");
-					err.setStatusCode(500);
-					err.setReasonCode(ResourceError.REASON_UNKNOWN);
-				}
-				throw new ResourceException(err);
-			}
 			incident.setDriver(driver);
 		}
 		
@@ -184,22 +242,11 @@ public class IncidentResource {
 			owner.setInsurancePhone2(ownerInsurancePhone2);
 			owner.setInsuranceNumber(ownerInsuranceNumber);
 			
-			if (!personDao.save(owner) || 0 >= owner.getPersonId()) {
-				ResourceError err = ResourceError.getInstance();
-				if (!err.isSet()) {
-					err.setMessage("incident not saved");
-					err.setStatusCode(500);
-					err.setReasonCode(ResourceError.REASON_UNKNOWN);
-				}
-				throw new ResourceException(err);
-			}
-			incident.setDriver(owner);
+			incident.setOwner(owner);
 		}
 		
-		IncidentDao incidentDao = IncidentDao.getInstance();
 		
 		if (!incidentDao.save(incident) || 0 >= incident.getIncidentId()) {
-			ResourceError err = ResourceError.getInstance();
 			if (!err.isSet()) {
 				err.setMessage("incident not saved");
 				err.setStatusCode(500);
