@@ -44,6 +44,8 @@ public class Person {
 		this.insurancePhone1 = insurancePhone1;
 		this.insurancePhone2 = insurancePhone2;
 		this.insuranceNumber = insuranceNumber;
+		
+		
 	}
 	
 	public Person(int personId, String email, String firstName,

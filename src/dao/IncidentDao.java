@@ -2,8 +2,12 @@ package dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Calendar;
+
 import db.MySql;
 import entities.Incident;
 import entities.Person;
@@ -18,6 +22,57 @@ public class IncidentDao {
 		connection = MySql.getInstance().getConnection();
 	}
 
+	public Incident getById(int incidentId, int userId) {
+		Incident incident = new Incident();
+		try {
+			CallableStatement callable = connection.prepareCall("call sp_getIncidentById(?, ?)");
+			callable.setInt(1, incidentId);
+			callable.setInt(2, userId);
+			ResultSet result = callable.executeQuery(); 
+			if (!result.first()) {
+				return null;
+			}
+
+			incident.setIncidentId(result.getInt("incidentId"));
+			incident.setUserId(result.getInt("userId"));
+			Date date = result.getDate("date");
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			incident.setDate(cal);
+			incident.setVehicleLicensePlate(result.getString("vehicleLicensePlate"));
+			incident.setVehicleBrand(result.getString("vehicleLicenseBrand"));
+			incident.setVehicleModel(result.getString("vehicleLicenseModel"));
+			
+			int driverId = result.getInt("driverId");
+			int ownerId = result.getInt("ownerId");
+			
+			PersonDao personDao = PersonDao.getInstance();
+			if (0 < driverId) {
+				Person driver = personDao.getById(driverId);
+				if (null != driver) {
+					incident.setDriver(driver);
+				}
+			}
+			
+			if (0 < ownerId) {
+				Person owner = personDao.getById(ownerId);
+				if (null != owner) {
+					incident.setOwner(owner);
+				}
+			}
+			
+			return incident;
+		}
+		catch (SQLException e) {
+			//e.printStackTrace();
+			ResourceError err = ResourceError.getInstance();
+			err.setMessage("internal error");
+			err.setStatusCode(500);
+			err.setReasonCode(ResourceError.REASON_UNKNOWN);
+			return null;
+		}
+	}
+	
 	public boolean save(Incident incident) {
 		// insert or update the incident to the db
 		try {

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import db.MySql;
 import entities.Person;
+import entities.ResourceError;
 
 public class PersonDao {
 	
@@ -44,7 +45,11 @@ public class PersonDao {
 			return person;
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			ResourceError err = ResourceError.getInstance();
+			err.setMessage("internal error");
+			err.setStatusCode(500);
+			err.setReasonCode(ResourceError.REASON_UNKNOWN);
 			return null;
 		}
 	}
@@ -84,7 +89,12 @@ public class PersonDao {
 			if (0 < person.getPersonId()) { // update mode
 				int rowsUpdated = callable.getInt(i);
 				if (1 != rowsUpdated) {
-					//TODO should roll back if rowsUpdated greater then 1
+					ResourceError err = ResourceError.getInstance();
+					if (!err.isSet()) {
+						err.setMessage("user update failed, invalid input");
+						err.setStatusCode(400);
+						err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
+					}
 					return false;
 				}
 			}
@@ -96,7 +106,12 @@ public class PersonDao {
 			return true;
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			ResourceError err = ResourceError.getInstance();
+			if (!err.isSet()) {
+				err.setMessage("internal error");
+				err.setStatusCode(500);
+				err.setReasonCode(ResourceError.REASON_UNKNOWN);
+			}
 			return false;
 		}
 	}

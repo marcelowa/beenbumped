@@ -8,6 +8,7 @@ DROP PROCEDURE IF EXISTS sp_authenticateUser;
 DROP PROCEDURE IF EXISTS sp_authorizeUser;
 DROP PROCEDURE IF EXISTS sp_createIncident;
 DROP PROCEDURE IF EXISTS sp_updateIncident;
+DROP PROCEDURE IF EXISTS sp_getIncidentById;
 
 -- =============================================
 -- Description: Create a new person
@@ -497,5 +498,34 @@ WHERE
 	AND userId				= userIdParam;
 SET rowsUpdatedOut 		= ROW_COUNT();
 
+END$$
+DELIMITER ;
+
+-- =============================================
+-- Description: get an existing person by id
+-- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
+-- =============================================
+DELIMITER $$
+USE beenbumped$$
+CREATE PROCEDURE sp_getIncidentById (
+	IN incidentIdParam INT UNSIGNED,
+	IN userIdParam INT UNSIGNED
+)
+BEGIN
+SELECT
+	incidentId,
+	userId,
+	date,
+	vehicleLicensePlate,
+	vehicleBrand,
+	vehicleModel,
+	driverPersonId,
+	ownerPersonId,
+	created,
+	modified
+FROM
+	beenbumped.t_incidents
+WHERE incidentId = incidentIdParam
+	AND userId = userIdParam;
 END$$
 DELIMITER ;
