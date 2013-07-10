@@ -23,6 +23,7 @@ public class Main {
 		user.setEmail("a mail address2");
 		user.setFirstName("a first name2");
 		user.setLastName("a last name2");
+		user.setIDNumber("1234567890");
 		user.setCity("the city name ");
 		user.setStreetName("the street name");
 		//TODO handle better integers, it crushes the application if non integer string is passed here
@@ -51,6 +52,7 @@ public class Main {
 		user.setEmail("no address2");
 		user.setFirstName("no first name2");
 		user.setLastName("no last name2");
+		user.setIDNumber("1234567890");//need to check if big integer
 		user.setCity("no city name2");
 		user.setStreetName("the street name");
 		//TODO handle better integers, it crushes the application if non integer string is passed here
@@ -71,7 +73,7 @@ public class Main {
 	
 	public static void createPerson() {
 		PersonDao dao = PersonDao.getInstance();
-		Person p = new Person("marcelo.waisman@gmail.commmm", "Marcelowaisman", "Waismandwdq", "Ramat Gan", "Hachula", 16, "Appartment 12", 52255, "050-8789831", "", "Stam", "Agent Stam", "no phone1", "no phone2", "thenumberoftheinsura");
+		Person p = new Person("marcelo.waisman@gmail.commmm", "Marcelowaisman", "Waismandwdq","0987654321", "Ramat Gan", "Hachula", 16, "Appartment 12", 52255, "050-8789831", "", "Stam", "Agent Stam", "no phone1", "no phone2", "thenumberoftheinsura");
 		dao.save(p);
 	}
 	

@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS beenbumped.t_persons (
 	email VARCHAR(320) NOT NULL ,
 	firstName VARCHAR(30) NOT NULL ,
 	lastName VARCHAR(30) NOT NULL ,
+	IDNumber VARCHAR(10) NULL,
 	city VARCHAR(30) NULL ,
 	streetName VARCHAR(50) NULL ,
 	houseNumber SMALLINT NULL ,

@@ -30,6 +30,7 @@ public class PersonDao {
 			person.setEmail(result.getString("email"));
 			person.setFirstName(result.getString("firstName"));
 			person.setLastName(result.getString("lastName"));
+			person.setIDNumber(result.getString("IDNumber"));
 			person.setCity(result.getString("city"));
 			person.setStreetName(result.getString("streetName"));
 			person.setHouseNumber(result.getInt("houseNumber"));
@@ -61,16 +62,17 @@ public class PersonDao {
 			CallableStatement callable;
 			int i = 0;
 			if (0 < person.getPersonId()) {
-				callable = connection.prepareCall("call sp_updatePerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				callable = connection.prepareCall("call sp_updatePerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				callable.setInt(++i,person.getPersonId());
 			}
 			else {
-				callable = connection.prepareCall("call sp_createPerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				callable = connection.prepareCall("call sp_createPerson(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			}
 			
 			callable.setString(++i,person.getEmail());
 			callable.setString(++i,person.getFirstName());
 			callable.setString(++i,person.getLastName());
+			callable.setString(++i,person.getIDNumber());
 			callable.setString(++i,person.getStreetName());
 			callable.setString(++i,person.getCity());
 			callable.setInt(++i,person.getHouseNumber());

@@ -43,6 +43,7 @@ public class PersonResource {
 			@FormParam("email") @DefaultValue("") String email ,
 			@FormParam("firstName") @DefaultValue("") String firstName,
 			@FormParam("lastName") @DefaultValue("") String lastName,
+			@FormParam("IDNumber") @DefaultValue("") String IDNumber,
 			@FormParam("city") @DefaultValue("") String city,
 			@FormParam("streetName") @DefaultValue("") String streetName,
 			@FormParam("houseNumber") @DefaultValue("-1") int houseNumber,
@@ -62,6 +63,7 @@ public class PersonResource {
 		person.setEmail((String)email);
 		person.setFirstName(firstName);
 		person.setLastName(lastName);
+		person.setIDNumber(IDNumber);
 		person.setCity(city);
 		person.setStreetName(streetName);
 		//TODO handle better integers, it crushes the application if non integer string is passed here

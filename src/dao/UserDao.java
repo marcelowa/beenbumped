@@ -104,17 +104,18 @@ public class UserDao {
 			boolean updateMode = false;
 			if (0 < user.getUserId() && 0 < user.getPersonId()) {
 				updateMode = true;
-				callable = connection.prepareCall("call sp_updateUser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				callable = connection.prepareCall("call sp_updateUser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				callable.setInt(++i,user.getPersonId());
 				callable.setInt(++i,user.getUserId());
 			}
 			else {
-				callable = connection.prepareCall("call sp_createUser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+				callable = connection.prepareCall("call sp_createUser(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			}
 			
 			callable.setString(++i,user.getEmail());
 			callable.setString(++i,user.getFirstName());
 			callable.setString(++i,user.getLastName());
+			callable.setString(++i,user.getIDNumber());
 			callable.setString(++i,user.getStreetName());
 			callable.setString(++i,user.getCity());
 			callable.setInt(++i,user.getHouseNumber());
@@ -191,6 +192,7 @@ public class UserDao {
 			user.setEmail(result.getString("email"));
 			user.setFirstName(result.getString("firstName"));
 			user.setLastName(result.getString("lastName"));
+			user.setIDNumber(result.getString("IDNumber"));
 			user.setCity(result.getString("city"));
 			user.setStreetName(result.getString("streetName"));
 			user.setHouseNumber(result.getInt("houseNumber"));
