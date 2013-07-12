@@ -12,13 +12,13 @@ public class User extends Person {
 	private String authHash;
 
 	public User(int userId, String username, String password, int personId, String email, String firstName,
-			String lastName, String IDNumber, String city, String streetName, int houseNumber,
+			String lastName, String idNumber, String city, String streetName, int houseNumber,
 			String addressDetails, int zipcode, String phone1, String phone2,
 			String insuranceCompany, String insuranceAgentName, String insurancePhone1,
 			String insurancePhone2, String insuranceId) {
 		
 		super(personId, email, firstName,
-				lastName, IDNumber, city, streetName, houseNumber,
+				lastName, idNumber, city, streetName, houseNumber,
 				addressDetails, zipcode, phone1, phone2,
 				insuranceCompany, insuranceAgentName, insurancePhone1,
 				insurancePhone2, insuranceId);

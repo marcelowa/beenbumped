@@ -80,7 +80,7 @@ public class UserResource {
 			@FormParam("email") @DefaultValue("") String email ,
 			@FormParam("firstName") @DefaultValue("") String firstName,
 			@FormParam("lastName") @DefaultValue("") String lastName,
-			@FormParam("IDNumber") @DefaultValue("") String IDNumber,
+			@FormParam("idNumber") @DefaultValue("") String idNumber,
 			@FormParam("city") @DefaultValue("") String city,
 			@FormParam("streetName") @DefaultValue("") String streetName,
 			@FormParam("houseNumber") @DefaultValue("-1") String houseNumber,  // validate integer
@@ -147,7 +147,7 @@ public class UserResource {
 		user.setEmail((String)email);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
-		user.setIDNumber(IDNumber); //TODO handle length
+		user.setIdNumber(idNumber); //TODO handle length
 		user.setCity(city);
 		user.setStreetName(streetName);
 		//TODO handle better integers, it crushes the application if non integer string is passed here

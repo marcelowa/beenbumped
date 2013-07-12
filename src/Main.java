@@ -23,7 +23,7 @@ public class Main {
 		user.setEmail("a mail address2");
 		user.setFirstName("a first name2");
 		user.setLastName("a last name2");
-		user.setIDNumber("1234567890");
+		user.setIdNumber("1234567890");
 		user.setCity("the city name ");
 		user.setStreetName("the street name");
 		//TODO handle better integers, it crushes the application if non integer string is passed here
@@ -52,7 +52,7 @@ public class Main {
 		user.setEmail("no address2");
 		user.setFirstName("no first name2");
 		user.setLastName("no last name2");
-		user.setIDNumber("1234567890");//need to check if big integer
+		user.setIdNumber("1234567890");//need to check if big integer
 		user.setCity("no city name2");
 		user.setStreetName("the street name");
 		//TODO handle better integers, it crushes the application if non integer string is passed here

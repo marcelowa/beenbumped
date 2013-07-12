@@ -9,7 +9,7 @@ public class Person {
 	private String email;
 	private String firstName;
 	private String lastName;
-	private String IDNumber;
+	private String idNumber;
 	private String city;
 	private String streetName;
 	private int houseNumber = -1;
@@ -25,7 +25,7 @@ public class Person {
 	
 	
 	public Person(String email, String firstName,
-			String lastName, String IDNumber,String city, String streetName, int houseNumber,
+			String lastName, String idNumber,String city, String streetName, int houseNumber,
 			String addressDetails, int zipcode, String phone1, String phone2,
 			String insuranceCompany, String insuranceAgentName, String insurancePhone1,
 			String insurancePhone2, String insuranceNumber) {
@@ -33,7 +33,7 @@ public class Person {
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.IDNumber = IDNumber;
+		this.idNumber = idNumber;
 		this.city = city;
 		this.streetName = streetName;
 		this.houseNumber = houseNumber;
@@ -51,7 +51,7 @@ public class Person {
 	}
 	
 	public Person(int personId, String email, String firstName,
-			String lastName, String IDNumber, String city, String streetName, int houseNumber,
+			String lastName, String idNumber, String city, String streetName, int houseNumber,
 			String addressDetails, int zipcode, String phone1, String phone2,
 			String insuranceCompany, String insuranceAgentName, String insurancePhone1,
 			String insurancePhone2, String insuranceNumber) {
@@ -60,7 +60,7 @@ public class Person {
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.IDNumber = IDNumber;
+		this.idNumber = idNumber;
 		this.city = city;
 		this.streetName = streetName;
 		this.houseNumber = houseNumber;
@@ -112,12 +112,12 @@ public class Person {
 		this.lastName = lastName;
 	}
 	
-	public String getIDNumber() {
-		return IDNumber;
+	public String getIdNumber() {
+		return idNumber;
 	}
 
-	public void setIDNumber(String IDNumber) {
-		this.IDNumber = IDNumber;
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
 	}
 
 	public String getCity() {

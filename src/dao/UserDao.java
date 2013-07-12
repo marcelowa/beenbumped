@@ -115,7 +115,7 @@ public class UserDao {
 			callable.setString(++i,user.getEmail());
 			callable.setString(++i,user.getFirstName());
 			callable.setString(++i,user.getLastName());
-			callable.setString(++i,user.getIDNumber());
+			callable.setString(++i,user.getIdNumber());
 			callable.setString(++i,user.getStreetName());
 			callable.setString(++i,user.getCity());
 			callable.setInt(++i,user.getHouseNumber());
@@ -192,7 +192,7 @@ public class UserDao {
 			user.setEmail(result.getString("email"));
 			user.setFirstName(result.getString("firstName"));
 			user.setLastName(result.getString("lastName"));
-			user.setIDNumber(result.getString("IDNumber"));
+			user.setIdNumber(result.getString("idNumber"));
 			user.setCity(result.getString("city"));
 			user.setStreetName(result.getString("streetName"));
 			user.setHouseNumber(result.getInt("houseNumber"));
