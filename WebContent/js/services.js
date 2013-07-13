@@ -11,6 +11,8 @@ angular.module("beenbumpedServices", ["ngResource"]).config(function ($httpProvi
     $httpProvider.defaults.headers.put["Content-Type"] = $httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8";
 }).factory("User", function($resource, $http){
 	return $resource("/beenbumped/rest/user/:userId");
+}).factory("Incident", function($resource, $http){
+	return $resource("/beenbumped/rest/incident/:incidentId");
 }).factory('registry', function() {
 	var store = [];
 	return {

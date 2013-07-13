@@ -97,8 +97,7 @@ public class IncidentResource {
 			@FormParam("vehicleModel") @DefaultValue("") String vehicleModel,
 			
 			// car's driver data
-			// @FormParam("driverPersonId") @DefaultValue("-1") String driverPersonId,
-			@FormParam("driverEmail") @DefaultValue("") String driverEmail ,
+			@FormParam("driverIdNumber") @DefaultValue("") String driverIdNumber,
 			@FormParam("driverFirstName") @DefaultValue("") String driverFirstName,
 			@FormParam("driverLastName") @DefaultValue("") String driverLastName,
 			@FormParam("driverPhone1") @DefaultValue("") String driverPhone1,
@@ -108,10 +107,10 @@ public class IncidentResource {
 			@FormParam("driverInsurancePhone1") @DefaultValue("") String driverInsurancePhone1, 
 			@FormParam("driverInsurancePhone2") @DefaultValue("") String driverInsurancePhone2,
 			@FormParam("driverInsuranceNumber") @DefaultValue("") String driverInsuranceNumber,
+			@FormParam("driverEmail") @DefaultValue("") String driverEmail,
 			
 			// car's owner data
-			// @FormParam("ownerPersonId") @DefaultValue("-1") String ownerPersonId,
-			@FormParam("ownerEmail") @DefaultValue("") String ownerEmail ,
+			@FormParam("ownerIdNumber") @DefaultValue("") String ownerIdNumber,
 			@FormParam("ownerFirstName") @DefaultValue("") String ownerFirstName,
 			@FormParam("ownerLastName") @DefaultValue("") String ownerLastName,
 			@FormParam("ownerPhone1") @DefaultValue("") String ownerPhone1,
@@ -120,7 +119,8 @@ public class IncidentResource {
 			@FormParam("ownerInsuranceAgentName") @DefaultValue("") String ownerInsuranceAgentName,
 			@FormParam("ownerInsurancePhone1") @DefaultValue("") String ownerInsurancePhone1, 
 			@FormParam("ownerInsurancePhone2") @DefaultValue("") String ownerInsurancePhone2,
-			@FormParam("ownerInsuranceNumber") @DefaultValue("") String ownerInsuranceNumber
+			@FormParam("ownerInsuranceNumber") @DefaultValue("") String ownerInsuranceNumber,
+			@FormParam("ownerEmail") @DefaultValue("") String ownerEmail
 			
 			) throws Exception {
 
@@ -194,20 +194,21 @@ public class IncidentResource {
 		incident.setVehicleModel(vehicleModel);
 		
 		if (driver.getPersonId() > 0
-				|| driverEmail != ""
-				|| driverFirstName != ""
-				|| driverLastName != ""
-				|| driverPhone1 != ""
-				|| driverPhone2 != ""
-				|| driverInsuranceCompany != ""
-				|| driverInsuranceAgentName != ""
-				|| driverInsurancePhone1 != ""
-				|| driverInsurancePhone2 != ""
-				|| driverInsuranceNumber != ""
+				|| !driverFirstName.equals("")
+				|| !driverLastName.equals("")
+				|| !driverIdNumber.equals("")
+				|| !driverPhone1.equals("")
+				|| !driverPhone2.equals("")
+				|| !driverInsuranceCompany.equals("")
+				|| !driverInsuranceAgentName.equals("")
+				|| !driverInsurancePhone1.equals("")
+				|| !driverInsurancePhone2.equals("")
+				|| !driverInsuranceNumber.equals("")
+				|| !driverEmail.equals("")
 			) {
-			driver.setEmail(driverEmail);
 			driver.setFirstName(driverFirstName);
 			driver.setLastName(driverLastName);
+			driver.setIdNumber(driverIdNumber);
 			driver.setPhone1(driverPhone1);
 			driver.setPhone2(driverPhone2);
 			driver.setInsuranceCompany(driverInsuranceCompany);
@@ -215,25 +216,27 @@ public class IncidentResource {
 			driver.setInsurancePhone1(driverInsurancePhone1);
 			driver.setInsurancePhone2(driverInsurancePhone2);
 			driver.setInsuranceNumber(driverInsuranceNumber);
+			driver.setEmail(driverEmail);
 			
 			incident.setDriver(driver);
 		}
 		
 		if (owner.getPersonId() > 0
-				|| ownerEmail != ""
-				|| ownerFirstName != ""
-				|| ownerLastName != ""
-				|| ownerPhone1 != ""
-				|| ownerPhone2 != ""
-				|| ownerInsuranceCompany != ""
-				|| ownerInsuranceAgentName != ""
-				|| ownerInsurancePhone1 != ""
-				|| ownerInsurancePhone2 != ""
-				|| ownerInsuranceNumber != ""
+				|| !ownerFirstName.equals("")
+				|| !ownerLastName.equals("")
+				|| !ownerIdNumber.equals("")
+				|| !ownerPhone1.equals("")
+				|| !ownerPhone2.equals("")
+				|| !ownerInsuranceCompany.equals("")
+				|| !ownerInsuranceAgentName.equals("")
+				|| !ownerInsurancePhone1.equals("")
+				|| !ownerInsurancePhone2.equals("")
+				|| !ownerInsuranceNumber.equals("")
+				|| !ownerEmail.equals("")
 				) {
-			owner.setEmail(ownerEmail);
 			owner.setFirstName(ownerFirstName);
 			owner.setLastName(ownerLastName);
+			owner.setIdNumber(ownerIdNumber);
 			owner.setPhone1(ownerPhone1);
 			owner.setPhone2(ownerPhone2);
 			owner.setInsuranceCompany(ownerInsuranceCompany);
@@ -241,6 +244,7 @@ public class IncidentResource {
 			owner.setInsurancePhone1(ownerInsurancePhone1);
 			owner.setInsurancePhone2(ownerInsurancePhone2);
 			owner.setInsuranceNumber(ownerInsuranceNumber);
+			owner.setEmail(ownerEmail);
 			
 			incident.setOwner(owner);
 		}
