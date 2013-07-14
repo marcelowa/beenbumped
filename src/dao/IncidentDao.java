@@ -4,10 +4,14 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import resources.ResourceException;
 import db.MySql;
 import entities.Incident;
 import entities.Person;
 import entities.ResourceError;
+import dao.UserDao;
+import entities.IncidentPage;
 
 public class IncidentDao {
 
@@ -140,6 +144,65 @@ public class IncidentDao {
 			}
 			return false;
 		}
+	}
+	
+	public IncidentPage getIncidentHistory(int userId, String authHash, short linesInPage, short pageNumber){
+		IncidentPage result = new IncidentPage();
+		Incident[] incidents;
+		incidents = new Incident[linesInPage];
+		short totalLines;
+		CallableStatement callable;
+		ResultSet rs;
+		UserDao userDao = UserDao.getInstance();
+		ResourceError err = ResourceError.getInstance();
+		// validate input:			
+		if (!userDao.isAuthorized(userId, authHash)){
+			err.setMessage("unauthorized reason:mismatch userId, authHash");
+			err.setStatusCode(400);
+			err.setReasonCode(ResourceError.REASON_AUTHENTICATION_FAILED);
+			throw new ResourceException(err);
+		}
+		try {
+			callable = connection.prepareCall("call sp_createIncident(?,?,?,?)");
+
+			callable.setInt(1,userId);
+			callable.setShort(2,linesInPage);
+			callable.setShort(3,pageNumber);
+			callable.registerOutParameter(3, java.sql.Types.SMALLINT);
+
+			rs=callable.executeQuery();
+			totalLines = rs.getShort("numberOfLines");
+
+			int counter = 0;
+			//incidentId, userId, date, notes, location, vehicleLicensePlate, vehicleBrand, vehicleModel, driverPersonId, ownerPersonId
+			while(rs.next()) {
+				incidents[counter].setIncidentId(rs.getInt("incidentId"));
+				incidents[counter].setUserId(rs.getInt("UserId"));
+				incidents[counter].setDate(rs.getDate("Date")); 
+				incidents[counter].setNotes(rs.getString("Notes"));
+				incidents[counter].setLocation(rs.getString("Location"));
+				incidents[counter].setVehicleLicensePlate(rs.getString("VehicleLicensePlate"));
+				incidents[counter].setVehicleBrand(rs.getString("VehicleBrand"));
+				incidents[counter].setVehicleModel(rs.getString("VehicleModel"));
+				incidents[counter].setDriver(PersonDao.getInstance().getById(rs.findColumn("driverPersonId")));
+				incidents[counter].setOwner(PersonDao.getInstance().getById(rs.findColumn("ownerPersonId")));
+
+				counter++;
+			}
+			result = new IncidentPage(incidents,totalLines);
+
+		}
+		catch (SQLException e) {
+			if (!err.isSet()) {
+				err.setMessage("internal error");
+				err.setStatusCode(500);
+				err.setReasonCode(ResourceError.REASON_UNKNOWN);
+
+			}
+			return null;
+		}
+
+		return result;
 	}
 	
 	static public IncidentDao getInstance() {

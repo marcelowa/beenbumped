@@ -542,3 +542,45 @@ WHERE incidentId = incidentIdParam
 
 END$$
 DELIMITER ;
+
+-- --------------------------------------------------------------------------------
+-- Routine DDL
+-- Note: comments before and after the routine body will not be stored by the server
+-- --------------------------------------------------------------------------------
+DELIMITER $$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getIncidentHistory`(
+	IN userId INT,
+	IN linesInPage SMALLINT,
+	IN pageNumber SMALLINT,
+	OUT numberOfLines SMALLINT
+)
+BEGIN
+
+declare skip smallint;
+declare rows smallint;
+
+/** this Sp will return all the incidents a user have with a pager
+and cos mysql is @$^# I have to use dynamic statment*/
+if pageNumber <= 1 then
+	set @skip = 0;
+	set @rows = linesInPage;
+else
+	set @skip = linesInPage*(pageNumber-1);
+	set @rows = linesInPage*(pageNumber);
+END IF;
+
+SET numberOfLines = (SELECT count(*)
+					FROM `beenbumped`.`t_incidents`
+					WHERE userId = userId);
+
+PREPARE STMT FROM 
+'SELECT incidentId, userId, date, notes, location, vehicleLicensePlate, vehicleBrand, vehicleModel, driverPersonId, ownerPersonId
+FROM `beenbumped`.`t_incidents`
+WHERE userId = userId
+LIMIT ?,?';
+
+EXECUTE STMT USING @skip,@rows;
+
+END$$
+DELIMITER ;
