@@ -17,6 +17,14 @@ public class PersonDao {
 		connection = MySql.getInstance().getConnection(); 
 	}
 	
+	/**Return a Person object given an id
+	 * Parameters:
+	 * 		@param personId integer
+	 * Returns:
+	 * 		@return Person
+	 * Throws:
+	 * 		@exception SQLException
+	 * */
 	public Person getById(int id) {
 		Person person = new Person();
 		try {
@@ -55,6 +63,13 @@ public class PersonDao {
 		}
 	}
 	
+	/**Insert a Person object to the DB
+	 * Parameters:
+	 * 		@param person Person
+	 * Returns:
+	 * 		@return boolean
+	 * Throws:
+	 * 		@exception SQLException*/
 	public boolean save(Person person) {
 		// insert the person to the db
 		try {
@@ -118,6 +133,10 @@ public class PersonDao {
 		}
 	}
 	
+	/**Handle a person object, created so we won't have to use static methods 
+	 * Return:
+	 * 		@return Person
+	 * */
 	static public PersonDao getInstance() {
 		if (null == instance) {
 			instance = new PersonDao();

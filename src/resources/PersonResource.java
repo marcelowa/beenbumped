@@ -17,9 +17,18 @@ import javax.ws.rs.core.UriInfo;
 import dao.PersonDao;
 import entities.Person;
 
+/**Handles the inserts of a person to the DB*/
 @Path("/person")
 public class PersonResource {
 
+	/**Retrieve a person data from the DB
+	 * Parameters:
+	 * 		@param PersonId integer
+	 * Returns:
+	 * 		@return Person
+	 * Throws:
+	 * 		@exception RuntimeException
+	 * */
 	@GET
 	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -32,6 +41,31 @@ public class PersonResource {
 		return person;
 	}
 
+	/**Inserts a person data to the DB
+	 * Parameters:
+	 *  	@param UriInfo uriInfo
+	 *  	@param HttpServletRequest servletRequest
+	 * 		@param HttpServletResponse servletResponse
+	 * 		@param personeId integer, default value -1
+	 * 		@param email String
+	 *		@param firstName String
+	 *		@param lastName String 
+	 *		@param idNumber String, "teudat zehut" 
+	 *		@param city String 
+	 *		@param streetName String 
+	 *		@param houseNumber integer
+	 *		@param addressDetails String, additional information, like if you have more then one entrance to the building 
+	 *		@param zipcode integer
+	 *		@param phone1 String 
+	 *		@param phone2 String
+	 *		@param insuranceCompany String, insurance company name
+	 *		@param insuranceAgentName String 
+	 *		@param insurancePhone1 String
+	 *		@param insurancePhone2 String
+	 *		@param insuranceNumber String
+	 * Throws:
+	 * 		@exception Exception
+	 **/
 	@POST
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)

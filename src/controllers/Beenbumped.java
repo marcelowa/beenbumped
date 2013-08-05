@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+/**Active the JSON for the main web page*/
 public class Beenbumped extends HttpServlet {
 
 	private static final long serialVersionUID = -4260962579726500851L;

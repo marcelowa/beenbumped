@@ -22,9 +22,18 @@ import dao.UserDao;
 import entities.ResourceError;
 import entities.User;
 
+/**Handles the User entity, retrieve and save a user*/
 @Path("/user")
 public class UserResource {
 
+	/**Authenticate a user password
+	 * Parameters:
+	 * 		@param username String
+	 * 		@param password String
+	 * Returns:
+	 * 		@return user
+	 *  Throws:
+	 * 		@exception ResourceException*/
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public User authenticate(@QueryParam("username") String username,
@@ -42,6 +51,14 @@ public class UserResource {
 		return user;
 	}
 	
+	/**Return a user given an Id, verify with local hash
+	 * Parameters:
+	 * 		@param userId integer
+	 * 		@param authHash String
+	 * Returns:
+	 * 		@return user
+	 * Throws:
+	 * 		@exception ResourceException*/
 	@GET
 	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -68,6 +85,35 @@ public class UserResource {
 		return user;
 	}
 	
+	/**Inserts a user data to the DB
+	 * Parameters:
+	 *  	@param UriInfo uriInfo
+	 *  	@param HttpServletRequest servletRequest
+	 * 		@param HttpServletResponse servletResponse
+	 * 		@param personeId String, default value -1
+	 * 		@param userid String, default -1
+	 * 		@param email String
+	 *		@param firstName String
+	 *		@param lastName String 
+	 *		@param idNumber String, "teudat zehut" 
+	 *		@param city String 
+	 *		@param streetName String 
+	 *		@param houseNumber String
+	 *		@param addressDetails String, additional information, like if you have more then one entrance to the building 
+	 *		@param zipcode String
+	 *		@param phone1 String 
+	 *		@param phone2 String
+	 *		@param insuranceCompany String, insurance company name
+	 *		@param insuranceAgentName String 
+	 *		@param insurancePhone1 String
+	 *		@param insurancePhone2 String
+	 *		@param insuranceNumber String
+	 *		@param username String
+	 *		@param password String
+	 *		@param authHash String
+	 * Throws:
+	 * 		@exception ResourceException
+	 **/
 	@POST
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)

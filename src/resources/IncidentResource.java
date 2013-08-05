@@ -22,10 +22,18 @@ import entities.Incident;
 import entities.Person;
 import entities.ResourceError;
 
+/**Handles the Incident entity, retrieve and save an incident*/
 @Path("/incident")
 public class IncidentResource {
 
-	
+
+	/**Retrieve an incident data from the DB by id
+	 * Parameters:
+	 * 		@param incidentId String
+	 * 		@param userId String
+	 * 		@param authHash String
+	 * Returns:
+	 * 		@return Incident*/
 	@GET
 	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -73,6 +81,45 @@ public class IncidentResource {
 		return incident;
 	}
 	
+	/**Inserts an incident data to the DB
+	 * Parameters:
+	 *   	@param UriInfo uriInfo
+	 *  	@param HttpServletRequest servletRequest
+	 * 		@param HttpServletResponse servletResponse
+	 * 		@param incidentId String
+	 *		@param userId String
+	 *		@param authHash String
+	 *		@param date String
+	 *		@param notes String
+	 *		@param location String
+	 *		@param vehicleLicensePlate String
+	 *		@param vehicleBrand String
+	 *		@param vehicleModel String
+	 *		@param driverIdNumber String
+	 *		@param driverFirstName String
+	 *		@param driverLastName String
+	 *		@param driverPhone1 String
+	 *		@param driverPhone2 String
+	 *		@param driverInsuranceCompany String  
+	 *		@param driverInsuranceAgentName String
+	 *		@param driverInsurancePhone1 String 
+	 *		@param driverInsurancePhone2 String
+	 *		@param driverInsuranceNumber String
+	 *		@param driverEmail String
+	 *		@param ownerIdNumber String
+	 *		@param ownerFirstName String
+	 *		@param ownerLastName String
+	 *		@param ownerPhone1 String
+	 *		@param ownerPhone2 String
+	 *		@param ownerInsuranceCompany String  
+	 *		@param ownerInsuranceAgentName String
+	 *		@param ownerInsurancePhone1 String 
+	 *		@param ownerInsurancePhone2 String
+	 *		@param ownerInsuranceNumber String
+	 *		@param ownerEmail String
+	 * Throws:
+	 * 		@exception ResourceException
+	 **/
 	@POST
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)

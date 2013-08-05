@@ -8,12 +8,18 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.List;
 
+/**Handles the project http errors*/
 @Provider
 public class ResourceExceptionMapper implements ExceptionMapper<ResourceException> {
 
     @Context
     private HttpHeaders headers;
 
+    /**Get a caught error and build a response 
+     * Parameters:
+     * 		@param e ResourceException
+     * Returns:
+     * 		@return ResponseBuilder*/
     public Response toResponse(ResourceException e) {
     	ResponseBuilder rb = Response.status(e.getStatusCode()).entity(e.getError());
         

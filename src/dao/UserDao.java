@@ -17,6 +17,14 @@ public class UserDao {
 		connection = MySql.getInstance().getConnection();
 	}
 
+	/**Return a User object given an id
+	 * Parameters:
+	 * 		@param userId integer
+	 * Returns:
+	 * 		@return User
+	 * Throws:
+	 * 		@exception SQLException
+	 * */
 	public User getById(int id) {
 		try {
 			CallableStatement callable = connection.prepareCall("call sp_getUserById(?)");
@@ -33,6 +41,15 @@ public class UserDao {
 		}
 	}
 	
+	/**Set authentication string given a password string, if it is related to the user and valid
+	 *  Parameters:
+	 * 		@param username String
+	 * 		@param password String 
+	 * Returns:
+	 * 		@return null
+	 * Throws:
+	 * 		@exception SQLException
+	 * */
 	public User authenticate(String username, String password) {
 		try {
 			CallableStatement callable = connection.prepareCall("call sp_authenticateUser(?,?,?,?)");
@@ -74,6 +91,15 @@ public class UserDao {
 		}
 	}
 	
+	/**Checks if the authentication string is related to the user and valid
+	 *  Parameters:
+	 * 		@param userId integer
+	 * 		@param hash String 
+	 * Returns:
+	 * 		@return boolean
+	 * Throws:
+	 * 		@exception SQLException
+	 * */
 	public boolean isAuthorized(int userId, String hash) {
 		try {
 			CallableStatement callable = connection.prepareCall("call sp_authorizeUser(?,?,?)");
@@ -95,6 +121,14 @@ public class UserDao {
 		}
 	}
 	
+	/**Insert a User object to the DB
+	 * Parameters:
+	 * 		@param user User
+	 * Returns:
+	 * 		@return boolean
+	 * Throws:
+	 * 		@exception SQLException
+	 * */
 	public boolean save(User user) {
 		// insert the user to the db
 		try {
@@ -175,6 +209,14 @@ public class UserDao {
 		}
 	}
 	
+	/**Handles the result set from the DB, via callable.executeQuery(), and creating the user instance
+	 * Parameters:
+	 * 		@param result ResultSet
+	 * Return:
+	 * 		@return User
+	 * Throws:
+	 * 		@exception SQLException
+	 * */
 	private User getByResult(ResultSet result) {
 		User user = new User();
 		try {
@@ -215,6 +257,10 @@ public class UserDao {
 		return user;
 	}
 
+	/**Handle a user object, created so we won't have to use static methods 
+	 * Return:
+	 * 		@return User
+	 * */
 	static public UserDao getInstance() {
 		if (null == instance) {
 			instance = new UserDao();

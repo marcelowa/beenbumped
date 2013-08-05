@@ -22,6 +22,15 @@ public class IncidentDao {
 		connection = MySql.getInstance().getConnection();
 	}
 
+	/**Return a Incident object given an id
+	 * Parameters:
+	 * 		@param incidentId integer
+	 * 		@param userId integer
+	 * Returns:
+	 * 		@return Incident
+	 * Throws:
+	 * 		@exception SQLException
+	 * */
 	public Incident getById(int incidentId, int userId) {
 		Incident incident = new Incident();
 		ResourceError err = ResourceError.getInstance();
@@ -70,6 +79,14 @@ public class IncidentDao {
 		}
 	}
 	
+	/**Insert a Incident object to the DB
+	 * Parameters:
+	 * 		@param incident Incident
+	 * Returns:
+	 * 		@return boolean
+	 * Throws:
+	 * 		@exception SQLException
+	 * */
 	public boolean save(Incident incident) {
 		// insert or update the incident to the db
 		ResourceError err = ResourceError.getInstance();
@@ -146,6 +163,17 @@ public class IncidentDao {
 		}
 	}
 	
+	/**Return an Incident page from the DB
+	 * Parameters:
+	 * 		@param userId integer
+	 * 		@param authHash String
+	 * 		@param linesInPage short
+	 *		@param pageNumber short
+	 * Returns:
+	 * 		@return IncidentPage
+	 * Throws:
+	 * 		@exception SQLException
+	 * */
 	public IncidentPage getIncidentHistory(int userId, String authHash, short linesInPage, short pageNumber){
 		IncidentPage result = new IncidentPage();
 		Incident[] incidents;
@@ -205,6 +233,10 @@ public class IncidentDao {
 		return result;
 	}
 	
+	/**Handle a instance object, created so we won't have to use static methods 
+	 * Return:
+	 * 		@return User
+	 * */
 	static public IncidentDao getInstance() {
 		if (null == instance) {
 			instance = new IncidentDao();
