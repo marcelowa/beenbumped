@@ -9,6 +9,8 @@ DROP PROCEDURE IF EXISTS sp_authorizeUser;
 DROP PROCEDURE IF EXISTS sp_createIncident;
 DROP PROCEDURE IF EXISTS sp_updateIncident;
 DROP PROCEDURE IF EXISTS sp_getIncidentById;
+DROP PROCEDURE IF EXISTS sp_getIncidentHistory;
+
 
 -- =============================================
 -- Description: Create a new person
@@ -551,8 +553,8 @@ DELIMITER $$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getIncidentHistory`(
 	IN userId INT,
-	IN linesInPage SMALLINT,
 	IN pageNumber SMALLINT,
+	IN linesInPage SMALLINT,
 	OUT numberOfLines SMALLINT
 )
 BEGIN

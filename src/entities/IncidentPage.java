@@ -1,11 +1,18 @@
 package entities;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
+
 import entities.Incident;
 
 /**Represent a single page (web page) of incidents*/
+@XmlRootElement
 public class IncidentPage {
 	
-	private Incident[] incedents;
+	private Incident[] incidents;
+    
 	private int totalLines;
 	
 	/**An empty constructor*/
@@ -15,26 +22,28 @@ public class IncidentPage {
 	
 	/**Incident constructor
 	 * Parameters:
-	 * 		@param incident Incident[]
+	 * 		@param incidents Incident[]
 	 * 		@param totalLines integer
 	 * */
-	public IncidentPage (Incident[] incident, int totalLines){
-		this.incedents = incident;
+	public IncidentPage (Incident[] incidents, int totalLines){
+		this.incidents = incidents;
 		this.totalLines = totalLines;
 	}
 
 	/**An incidents getter
 	 * Returns:
 	 * 		@return Incident[]*/
+	@XmlElement(name="incident")
+	@XmlElementWrapper(name="incidents")
 	public Incident[] getIncidents() {
-		return incedents;
+		return incidents;
 	}
 
 	/**An incidents setter
 	 * Parameters:
 	 * 		@param incidents Incident[]*/
-	public void setIncidents(Incident[] incedents) {
-		this.incedents = incedents;
+	public void setIncidents(Incident[] incidents) {
+		this.incidents = incidents;
 	}
 
 	/**An total lines getter, return the total number of incidents that we have, for the pager.

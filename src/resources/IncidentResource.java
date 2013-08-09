@@ -19,6 +19,7 @@ import javax.ws.rs.core.UriInfo;
 import dao.IncidentDao;
 import dao.UserDao;
 import entities.Incident;
+import entities.IncidentPage;
 import entities.Person;
 import entities.ResourceError;
 
@@ -79,6 +80,55 @@ public class IncidentResource {
 		}
 		
 		return incident;
+	}
+	
+
+	@GET
+	@Path("history")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public IncidentPage getHistoryByUserId(@QueryParam("userId") @DefaultValue("-1") String userId,
+			@QueryParam("page") @DefaultValue("1") String page,
+			@QueryParam("linesInPage") @DefaultValue("20") String linesInPage,
+			@QueryParam("authHash") @DefaultValue("") String authHash) {
+		//return new Incident();
+		IncidentDao incidentDao = IncidentDao.getInstance();
+		UserDao userDao = UserDao.getInstance();
+		ResourceError err = ResourceError.getInstance();
+		int userIdOk, pageOk, linesInPageOk;
+		
+		// validate input:
+		try {
+			userIdOk = Integer.parseInt(userId);
+			pageOk = Integer.parseInt(page);
+			linesInPageOk = Integer.parseInt(linesInPage);
+		}
+		catch(Exception e) {
+			if (!err.isSet()) {
+				err.setMessage("invalid input, one of the following is not an int (userId, page, linesInPage)");
+				err.setStatusCode(400);
+				err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
+			}
+			throw new ResourceException(err);
+		}
+		
+		if (!userDao.isAuthorized(userIdOk, authHash)){
+			err.setMessage("unauthorized reason:mismatch userId, authHash");
+			err.setStatusCode(400);
+			err.setReasonCode(ResourceError.REASON_AUTHENTICATION_FAILED);
+			throw new ResourceException(err);
+		}
+		
+		IncidentPage IncidentPage = incidentDao.getIncidentHistory(userIdOk, pageOk, linesInPageOk);
+		if (null == IncidentPage) {
+			if (!err.isSet()) {
+				err.setMessage("unable to get incidents history");
+				err.setStatusCode(500);
+				err.setReasonCode(ResourceError.REASON_UNKNOWN);
+			}
+			throw new ResourceException(err);
+		}
+		
+		return IncidentPage;
 	}
 	
 	/**Inserts an incident data to the DB
