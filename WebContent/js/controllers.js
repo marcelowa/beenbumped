@@ -166,3 +166,7 @@ function IncidentEditCtrl($scope, $location, $routeParams, $filter, Incident, Us
 	};
 	
 }
+
+function IncidentHistoryCtrl($scope, $location, $filter, Incident, User, registry) {
+	
+}

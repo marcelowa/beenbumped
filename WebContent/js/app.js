@@ -9,6 +9,7 @@ config(['$routeProvider','$locationProvider', function($routeProvider, $location
 		.when('/user/edit', {templateUrl: 'partials/user-edit.html', controller: UserEditCtrl})
 		.when('/incident/edit', {templateUrl: 'partials/incident-edit.html', controller: IncidentEditCtrl})
 		.when('/incident/edit/:incidentId', {templateUrl: 'partials/incident-edit.html', controller: IncidentEditCtrl})
+		.when('/incident/history', {templateUrl: 'partials/incident-history.html', controller: IncidentHistoryCtrl})
 		.otherwise({redirectTo: '/menu'});
 	
 	$locationProvider.hashPrefix('!');

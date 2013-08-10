@@ -8,6 +8,7 @@
 <title>Beenbumped Application Client</title>
 <link rel="stylesheet" href="/beenbumped/lib/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" href="/beenbumped/lib/bootstrap/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/beenbumped/css/main.css">
 <script src="/beenbumped/lib/jquery/jquery-2.0.2.js"></script>
 <script src="/beenbumped/lib/jquery/jquery.cookie.js"></script>
 <script src="/beenbumped/lib/angular/angular.min.js"></script>
