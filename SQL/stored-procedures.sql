@@ -564,25 +564,29 @@ declare rows smallint;
 
 /** this Sp will return all the incidents a user have with a pager
 and cos mysql is @$^# I have to use dynamic statment*/
-if pageNumber <= 1 then
+
+SET @userIdInput = userId;
+
+IF pageNumber <= 1 then
 	set @skip = 0;
 	set @rows = linesInPage;
-else
+ELSE
 	set @skip = linesInPage*(pageNumber-1);
 	set @rows = linesInPage*(pageNumber);
 END IF;
 
-SET numberOfLines = (SELECT count(*)
-					FROM `beenbumped`.`t_incidents`
-					WHERE userId = userId);
+PREPARE STMT FROM
+'SET @numberOfLines = (SELECT count(*) FROM beenbumped.t_incidents WHERE userId = ?)';
+EXECUTE STMT USING @userIdInput;
+set numberOfLines = @numberOfLines;
 
 PREPARE STMT FROM 
 'SELECT incidentId, userId, date, notes, location, vehicleLicensePlate, vehicleBrand, vehicleModel, driverPersonId, ownerPersonId
-FROM `beenbumped`.`t_incidents`
-WHERE userId = userId
+FROM beenbumped.t_incidents
+WHERE userId = ?
 LIMIT ?,?';
 
-EXECUTE STMT USING @skip,@rows;
+EXECUTE STMT USING @userIdInput,@skip,@rows;
 
 END$$
 DELIMITER ;

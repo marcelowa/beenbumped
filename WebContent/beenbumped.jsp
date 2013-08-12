@@ -11,8 +11,8 @@
 <link rel="stylesheet" href="/beenbumped/css/main.css">
 <script src="/beenbumped/lib/jquery/jquery-2.0.2.js"></script>
 <script src="/beenbumped/lib/jquery/jquery.cookie.js"></script>
-<script src="/beenbumped/lib/angular/angular.min.js"></script>
-<script src="/beenbumped/lib/angular/angular-resource.min.js"></script>
+<script src="/beenbumped/lib/angular-1.1.5/angular.js"></script>
+<script src="/beenbumped/lib/angular-1.1.5/angular-resource.min.js"></script>
 <script src="/beenbumped/js/controllers.js"></script>
 <script src="/beenbumped/js/services.js"></script>
 <script src="/beenbumped/js/app.js"></script>
