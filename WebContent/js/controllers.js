@@ -1,11 +1,10 @@
 'use strict';
 
 function MenuCtrl($scope, $location, UserProvider, registry) {
-	UserProvider.getUser(function(user){
+	UserProvider.authorize(function(user){
 		$scope.user = user;
-			if (!$scope.user) {
-				return $location.path("/user/login");
-			}
+	}, function() {
+		return $location.path("/user/login");
 	});
 
 }
@@ -65,8 +64,8 @@ function UserRegisterCtrl($scope, $location, $filter, User, UserProvider) {
 	
 }
 
-function UserEditCtrl($scope, $location, $filter, UserProvider, registry) {
-	UserProvider.getUser(function(user){
+function UserEditCtrl($scope, $location, $filter, User, UserProvider, registry) {
+	UserProvider.authorize(function(user){
 		$scope.user = user;
 		if (!$scope.user) {
 			return $location.path("/user/login");
@@ -88,11 +87,13 @@ function UserEditCtrl($scope, $location, $filter, UserProvider, registry) {
 		$scope.isInvalid = function(user) {
 			return false;
 		};
+	}, function() {
+		return $location.path("/user/login");
 	});
 }
 
 function IncidentEditCtrl($scope, $location, $routeParams, $filter, Incident, UserProvider, registry) {
-	UserProvider.getUser(function(user){
+	UserProvider.authorize(function(user){
 		$scope.user = user;
 		$scope.params = $routeParams;
 		if (!$scope.user) {
@@ -108,6 +109,8 @@ function IncidentEditCtrl($scope, $location, $routeParams, $filter, Incident, Us
 		if (0 < $scope.params.incidentId) {
 			Incident.get($scope.incident, function(response) {
 				$scope.incident = response;
+				$scope.incident['userId'] = $scope.user.userId;
+				$scope.incident['authHash'] = $scope.user.authHash;
 			}, function(response) {
 				console.error(response);
 			});
@@ -115,7 +118,7 @@ function IncidentEditCtrl($scope, $location, $routeParams, $filter, Incident, Us
 		
 		$scope.save = function(incident) {
 			$scope.incident = Incident.save(incident, function(response){
-				$location.path("/menu");
+				$location.path("/incident/history");
 			}, function(response){
 				console.error(response);
 				//TODO show failure in edit form
@@ -123,17 +126,19 @@ function IncidentEditCtrl($scope, $location, $routeParams, $filter, Incident, Us
 		};
 		
 		$scope.cancel = function() {
-			$location.path("/user/menu");
+			window.history.back();
 		};
 		
 		$scope.isInvalid = function(user) {
 			return false;
 		};
+	}, function() {
+		return $location.path("/user/login");
 	});
 }
 
 function IncidentHistoryCtrl($scope, $location, $filter, Incident, UserProvider, registry) {
-	UserProvider.getUser(function(user){
+	UserProvider.authorize(function(user){
 		$scope.user = user;
 		if (!$scope.user) {
 			return $location.path("/user/login");
@@ -143,11 +148,33 @@ function IncidentHistoryCtrl($scope, $location, $filter, Incident, UserProvider,
 			userId : $scope.user.userId,
 			authHash : $scope.user.authHash
 		};
-		
+		$scope.incidentsDisplay = [];
 		Incident.history($scope.req, function(response) {
-			console.log(response);
+			$scope.incidents = response;
+			var incident;
+			var incidentTextArr;
+			for (var i=0,l = $scope.incidents.incidents.length;i<l;i++) {
+				incident = $scope.incidents.incidents[i];
+				incidentTextArr = [
+				                   incident.date || null
+				                   , incident.vehicleBrand
+				                   , incident.vehicleModel || null
+				                   , incident.driverFirstName  || null
+				                   , incident.driverLastName  || null
+				                   , incident.ownerFirstName  || null
+				                   , incident.ownerLastName  || null
+				                   , incident.notes  || null
+				                   ];
+				$scope.incidentsDisplay.push({
+					incidentId : incident.incidentId,
+					text : incidentTextArr.join(' '),
+					url : '#!/incident/edit/'+incident.incidentId
+				});
+			}
 		}, function(response) {
 			console.error(response);
 		});
+	}, function() {
+		return $location.path("/user/login");
 	});
 }

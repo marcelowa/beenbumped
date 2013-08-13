@@ -1,3 +1,15 @@
 @CHARSET "utf-8";
 
+.beenbumped {padding:35px 0;}
+.beenbumped h1{font-size:20px;}
 .incident-history .row {padding:5px 0; }
+
+
+@media (max-width: 979px) {
+	.beenbumped .navbar-fixed-top,
+  	.beenbumped .navbar-fixed-bottom {
+      	position: fixed;
+      	margin-left: 0px;
+      	margin-right: 0px;
+	}
+}

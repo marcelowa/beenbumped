@@ -102,7 +102,7 @@ angular.module("beenbumpedServices", ["ngResource"]).config(function ($httpProvi
 		resetUser : function() {
 			user = null;
 		},
-		getUser : function(callback) {
+		authorize : function(callback, failCallback) {
 			if (!$.isFunction(callback)) {
 				throw 'the callback is missing here';
 			}
@@ -116,13 +116,23 @@ angular.module("beenbumpedServices", ["ngResource"]).config(function ($httpProvi
 					login = angular.fromJson($.cookie('login') || null);			
 				} catch(e) {;}
 				if (!login || !login.userId || !login.authHash) {
-					return false;
+					if ($.isFunction(failCallback)) {
+						failCallback();
+					}
+					else {
+						return false;
+					}
 				}
 				
 				user = User.get(login, function(response) {
 					callback(user);
 				}, function(response) {
-					return false;
+					if ($.isFunction(failCallback)) {
+						failCallback();
+					}
+					else {
+						return false;
+					}
 				});
 			}
 		}

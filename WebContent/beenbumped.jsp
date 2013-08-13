@@ -18,6 +18,6 @@
 <script src="/beenbumped/js/app.js"></script>
 </head>
 <body>
-<div class="container" ng-view></div>
+<div class="container beenbumped" ng-view></div>
 </body>
 </html>
