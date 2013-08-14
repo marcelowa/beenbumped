@@ -1,3 +1,7 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import dao.PersonDao;
 import dao.UserDao;
 import entities.Person;
@@ -8,7 +12,16 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		updateUser();
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		try {
+			Date d = new Date(1375151100);
+			System.out.print(f.format(d));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		//updateUser();
 		//createUser();
 		//createPerson();
 		//getPerson(2);

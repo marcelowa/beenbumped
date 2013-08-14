@@ -7,6 +7,14 @@
 				<button class="btn" ng-click="save(incident)" ng-disabled="form.$invalid || isInvalid(incident)">Save</button>
 			</div>
 		</div>
+		
+		<div class="control-group">
+			<label class="control-label" for="incident-date">Date</label>
+			<div class="controls">
+				<input type="text" ng-model="incident.date" name="incident-date" id="incident-date" data-format="yyyy-MM-dd hh:ii">
+			</div>
+		</div>
+		
 		<div class="control-group">
 			<label class="control-label" for="driver-first-name">Driver's First Name</label>
 			<div class="controls">

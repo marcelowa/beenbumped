@@ -31,9 +31,6 @@ angular.module("beenbumpedServices", ["ngResource"]).config(function ($httpProvi
 		var incident = {};
 		angular.forEach(incidentOrig, function(value, key) {
 			switch (true) {
-				case key == 'date':
-					
-					break;
 				case (key.match(/^(?:driver|owner)$/) && typeof value == 'object'):
 					angular.forEach(value, function(innerValue, innerKey) {
 						innerKey = key + (innerKey[0].toUpperCase() + innerKey.substring(1));
@@ -45,7 +42,6 @@ angular.module("beenbumpedServices", ["ngResource"]).config(function ($httpProvi
 			}
 
 		}, incident);
-		incident['date'] = 0;
 		
 		return incident;
 	};

@@ -1,6 +1,8 @@
 package resources;
 
 import java.net.URI;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -186,7 +188,7 @@ public class IncidentResource {
 			@FormParam("authHash") @DefaultValue("") String authHash,
 			
 			// incident data
-			@FormParam("date") @DefaultValue("0") String date,
+			@FormParam("date") @DefaultValue("") String date,
 			@FormParam("notes") @DefaultValue("") String notes,
 			@FormParam("location") @DefaultValue("") String location,
 			@FormParam("vehicleLicensePlate") @DefaultValue("") String vehicleLicensePlate,
@@ -228,17 +230,16 @@ public class IncidentResource {
 		Person driver = new Person();
 		Person owner = new Person();
 		Incident incident = new Incident();
-		int userIdOk, incidentIdOk, dateOk; //, driverPersonIdOk, ownerPersonIdOk;
+		int userIdOk, incidentIdOk;
 		
 		// validate input:
 		try {
 			userIdOk = Integer.parseInt(userId);
 			incidentIdOk = Integer.parseInt(incidentId);
-			dateOk = Integer.parseInt(date);
 		}
 		catch(Exception e) {
 			if (!err.isSet()) {
-				err.setMessage("incident not saved, one of the following is not an int (userId, incidentId, date)");//, driverPersonId, ownerPersonId)");
+				err.setMessage("incident not saved, one of the following is not an int (userId, incidentId)");
 				err.setStatusCode(400);
 				err.setReasonCode(ResourceError.REASON_INVALID_INPUT);
 			}
@@ -283,7 +284,14 @@ public class IncidentResource {
 			incident.setUserId(userIdOk);
 		}
 		
-		incident.setDate(new Date(dateOk));
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		try {
+			incident.setDate(df.parse(date));
+		}
+		catch (ParseException e) {
+			incident.setDate(new Date());
+		}
+		
 		incident.setLocation(location);
 		incident.setNotes(notes);
 		incident.setVehicleLicensePlate(vehicleLicensePlate);

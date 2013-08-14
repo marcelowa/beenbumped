@@ -4,6 +4,8 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
+
 import db.MySql;
 import entities.Incident;
 import entities.Person;
@@ -42,7 +44,7 @@ public class IncidentDao {
 
 			incident.setIncidentId(result.getInt("incidentId"));
 			incident.setUserId(result.getInt("userId"));
-			incident.setDate(result.getDate("date"));
+			incident.setDate(new Date(result.getTimestamp("date").getTime()));
 			incident.setVehicleLicensePlate(result.getString("vehicleLicensePlate"));
 			incident.setVehicleBrand(result.getString("vehicleBrand"));
 			incident.setVehicleModel(result.getString("vehicleModel"));
@@ -120,7 +122,7 @@ public class IncidentDao {
 			}
 			
 			callable.setInt(++i,incident.getUserId());
-			callable.setDate(++i, new java.sql.Date(incident.getDate().getTime()));
+			callable.setTimestamp(++i, new java.sql.Timestamp(incident.getDate().getTime()));
 			callable.setString(++i,incident.getNotes());
 			callable.setString(++i,incident.getLocation());
 			callable.setString(++i,incident.getVehicleLicensePlate());
@@ -203,7 +205,7 @@ public class IncidentDao {
 				incidentsTmp[counter] = incident;
 				incident.setIncidentId(rs.getInt("incidentId"));
 				incident.setUserId(rs.getInt("userId"));
-				incident.setDate(rs.getDate("date")); 
+				incident.setDate(new Date(rs.getTimestamp("date").getTime()));
 				incident.setNotes(rs.getString("notes"));
 				incident.setLocation(rs.getString("location"));
 				incident.setVehicleLicensePlate(rs.getString("vehicleLicensePlate"));

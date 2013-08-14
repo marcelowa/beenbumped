@@ -100,6 +100,11 @@ function IncidentEditCtrl($scope, $location, $routeParams, $filter, Incident, Us
 			return $location.path("/user/login");
 		}
 		
+		$('#incident-date').datetimepicker({
+			'autoclose' : true,
+			'forceParse' : true,
+		});
+		
 		$scope.incident = {
 			incidentId : $scope.params.incidentId || -1,
 			userId : $scope.user.userId,
@@ -115,8 +120,12 @@ function IncidentEditCtrl($scope, $location, $routeParams, $filter, Incident, Us
 				console.error(response);
 			});
 		}
+		else {
+			//$scope.incident.date = new Date().toJSON().substring(0, 16).replace("T"," ");
+		}
 		
 		$scope.save = function(incident) {
+			$scope.incident.date = $('#incident-date').val();
 			$scope.incident = Incident.save(incident, function(response){
 				$location.path("/incident/history");
 			}, function(response){

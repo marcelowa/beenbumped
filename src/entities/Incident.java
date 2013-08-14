@@ -1,7 +1,10 @@
 package entities;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**Represent an incident event, there can be more then one incident to a user*/
 @XmlRootElement
@@ -73,9 +76,22 @@ public class Incident {
 
 	/**A date getter
 	 * Returns:
-	 * 		@return date*/
+	 * 		@return Date */
+	@XmlTransient
 	public Date getDate() {
 		return date;
+	}
+	
+	/**A date getter
+	 * Returns:
+	 * 		@return String*/
+	@XmlElement(name="date")
+	public String getDateString() {
+		if (null == date) {
+			return null;
+		}
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");//yyyy-mm-dd hh:mm:ss.fffffffff
+		return df.format(date);
 	}
 
 	/**A date setter
