@@ -1,23 +1,24 @@
-DROP PROCEDURE IF EXISTS sp_createPerson;
-DROP PROCEDURE IF EXISTS sp_updatePerson;
-DROP PROCEDURE IF EXISTS sp_getPersonById;
-DROP PROCEDURE IF EXISTS sp_createUser;
-DROP PROCEDURE IF EXISTS sp_updateUser;
-DROP PROCEDURE IF EXISTS sp_getUserById;
-DROP PROCEDURE IF EXISTS sp_authenticateUser;
-DROP PROCEDURE IF EXISTS sp_authorizeUser;
-DROP PROCEDURE IF EXISTS sp_createIncident;
-DROP PROCEDURE IF EXISTS sp_updateIncident;
-DROP PROCEDURE IF EXISTS sp_getIncidentById;
-DROP PROCEDURE IF EXISTS sp_getIncidentHistory;
+-- DELIMITER $$
+
+DROP PROCEDURE IF EXISTS sp_createPerson$$
+DROP PROCEDURE IF EXISTS sp_updatePerson$$
+DROP PROCEDURE IF EXISTS sp_getPersonById$$
+DROP PROCEDURE IF EXISTS sp_createUser$$
+DROP PROCEDURE IF EXISTS sp_updateUser$$
+DROP PROCEDURE IF EXISTS sp_getUserById$$
+DROP PROCEDURE IF EXISTS sp_authenticateUser$$
+DROP PROCEDURE IF EXISTS sp_authorizeUser$$
+DROP PROCEDURE IF EXISTS sp_createIncident$$
+DROP PROCEDURE IF EXISTS sp_updateIncident$$
+DROP PROCEDURE IF EXISTS sp_getIncidentById$$
+DROP PROCEDURE IF EXISTS sp_getIncidentHistory$$
 
 
 -- =============================================
 -- Description: Create a new person
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
-DELIMITER $$
-USE beenbumped$$
+
 CREATE PROCEDURE sp_createPerson (
 	IN email VARCHAR(320),
 	IN firstName VARCHAR(30),
@@ -38,7 +39,7 @@ CREATE PROCEDURE sp_createPerson (
 	OUT personIdOut INT UNSIGNED
 )
 BEGIN
-INSERT INTO beenbumped.t_persons (
+INSERT INTO t_persons (
 	email,
 	firstName,
 	lastName,
@@ -80,14 +81,12 @@ VALUES (
 );
 SET personIdOut = LAST_INSERT_ID();
 END$$
-DELIMITER ;
 
 -- =============================================
 -- Description: update an existing person
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
-DELIMITER $$
-USE beenbumped$$
+
 CREATE PROCEDURE sp_updatePerson (
 	IN personIdParam INT UNSIGNED,
 	IN email VARCHAR(320),
@@ -109,7 +108,7 @@ CREATE PROCEDURE sp_updatePerson (
 	OUT rowsUpdatedOut INT UNSIGNED
 )
 BEGIN
-UPDATE beenbumped.t_persons SET
+UPDATE t_persons SET
 	email						= email,
 	firstName				= firstName,
 	lastName					= lastName,
@@ -131,15 +130,13 @@ WHERE
 	personId					= personIdParam;
 SET rowsUpdatedOut 		= ROW_COUNT();
 END$$
-DELIMITER ;
 
 
 -- =============================================
 -- Description: get an existing person by id
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
-DELIMITER $$
-USE beenbumped$$
+
 CREATE PROCEDURE sp_getPersonById (
 	IN personIdParam INT UNSIGNED
 )
@@ -165,17 +162,15 @@ SELECT
 	created,
 	modified
 FROM
-	beenbumped.t_persons 
+	t_persons 
 WHERE personId = personIdParam;
 END$$
-DELIMITER ;
 
 -- =============================================
 -- Description: Create a new user
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
-DELIMITER $$
-USE beenbumped$$
+
 CREATE PROCEDURE sp_createUser (
 	IN email VARCHAR(320),
 	IN firstName VARCHAR(30),
@@ -228,7 +223,7 @@ call sp_createPerson(
 	personIdOut
 );
 
-INSERT INTO beenbumped.t_users (
+INSERT INTO t_users (
 	personId,
 	username,
 	password,
@@ -245,14 +240,12 @@ VALUES (
 call sp_authenticateUser(username, password, userIdOut, authHashOut);
 COMMIT;
 END$$
-DELIMITER ;
 
 -- =============================================
 -- Description: update an existing user
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
-DELIMITER $$
-USE beenbumped$$
+
 CREATE PROCEDURE sp_updateUser (
 	IN personIdParam INT UNSIGNED,
 	IN userIdParam INT UNSIGNED,
@@ -280,7 +273,7 @@ BEGIN
 SET rowsUpdatedUserOut = 0;
 
 SELECT COUNT(u.userID) INTO rowsUpdatedUserOut
-FROM beenbumped.t_users AS u
+FROM t_users AS u
 WHERE
 	u.userId				= userIdParam
 	AND u.personId		= personIdParam;
@@ -308,14 +301,12 @@ IF rowsUpdatedUserOut = 1 THEN
 	);
 END IF;
 END$$
-DELIMITER ;
 
 -- =============================================
 -- Description: get an existing user by id
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
-DELIMITER $$
-USE beenbumped$$
+
 CREATE PROCEDURE sp_getUserById (
 	IN userIdParam INT UNSIGNED
 )
@@ -344,18 +335,16 @@ SELECT
 	u.created,
 	u.modified
 FROM
-	beenbumped.t_users as u
-	LEFT JOIN beenbumped.t_persons as p ON u.personId = p.personId
+	t_users as u
+	LEFT JOIN t_persons as p ON u.personId = p.personId
 WHERE u.userId = userIdParam;
 END$$
-DELIMITER ;
 
 -- =============================================
 -- Description: authenticate and existing user, update authenticate table and return hash
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
-DELIMITER $$
-USE beenbumped$$
+
 CREATE PROCEDURE sp_authenticateUser (
 	IN usernameParam VARCHAR(100),
 	IN passwordParam VARCHAR(45),
@@ -370,24 +359,22 @@ SET hashResultOut = "";
 SELECT
 	u.userId INTO userIdOut
 FROM
-	beenbumped.t_users AS u
+	t_users AS u
 WHERE u.username = usernameParam
 	AND u.password = passwordParam
 LIMIT 1;
 
 IF userIdOut > 0 THEN
 	SET hashResultOut = password(concat(userIdOut,usernameParam,passwordParam,NOW()));
-	INSERT INTO beenbumped.t_authenticate(userId, authHash, expired, created, modified) VALUES(userIdOut, hashResultOut, ADDDATE(NOW(),1), NOW(), NOW());
+	INSERT INTO t_authenticate(userId, authHash, expired, created, modified) VALUES(userIdOut, hashResultOut, ADDDATE(NOW(),1), NOW(), NOW());
 END IF; 
 END$$
-DELIMITER ;
 
 -- =============================================
 -- Description: authorize by userId and hash
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
-DELIMITER $$
-USE beenbumped$$
+
 CREATE PROCEDURE sp_authorizeUser (
 	IN userIdParam INT UNSIGNED,
 	IN hashParam VARCHAR(100),
@@ -400,7 +387,7 @@ SET authResultOut = false;
 SELECT
 	true INTO authResultOut
 FROM
-	beenbumped.t_authenticate AS a
+	t_authenticate AS a
 WHERE
 	a.userId = userIdParam
 	AND a.authHash = hashParam
@@ -408,21 +395,19 @@ WHERE
 LIMIT 1;
 
 IF authResultOut = true THEN
-	UPDATE beenbumped.t_authenticate AS a
+	UPDATE t_authenticate AS a
 	SET expired = ADDDATE(NOW(),1)
 	WHERE 
 		a.userId = userIdParam
 		AND a.authHash = hashParam;
 END IF;
 END$$
-DELIMITER ;
 
 -- =============================================
 -- Description: Create a new incident
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
-DELIMITER $$
-USE beenbumped$$
+
 CREATE PROCEDURE sp_createIncident (
 	IN userId INT UNSIGNED,
 	IN date DATETIME,
@@ -443,7 +428,7 @@ SET incidentIdOut = 0;
 START TRANSACTION;
 
 -- create incident
-INSERT INTO beenbumped.t_incidents (
+INSERT INTO t_incidents (
 	userId,
 	date,
 	notes,
@@ -474,14 +459,12 @@ SET incidentIdOut = LAST_INSERT_ID();
 
 COMMIT;
 END$$
-DELIMITER ;
 
 -- =============================================
 -- Description: Update an existing incident
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
-DELIMITER $$
-USE beenbumped$$
+
 CREATE PROCEDURE sp_updateIncident (
 	IN incidentIdParam INT UNSIGNED,
 	IN userIdParam INT UNSIGNED,
@@ -498,7 +481,7 @@ CREATE PROCEDURE sp_updateIncident (
 BEGIN
 SET rowsUpdatedOut = 0;
 
-UPDATE beenbumped.t_incidents SET
+UPDATE t_incidents SET
 	date						= date,
 	location					= location,
 	vehicleLicensePlate	= vehicleLicensePlate,
@@ -513,14 +496,12 @@ WHERE
 SET rowsUpdatedOut 		= ROW_COUNT();
 
 END$$
-DELIMITER ;
 
 -- =============================================
 -- Description: get an existing person by id
 -- Note: all arguments must be passed to the proc since mysql doesn't support optional arguments
 -- =============================================
-DELIMITER $$
-USE beenbumped$$
+
 CREATE PROCEDURE sp_getIncidentById (
 	IN incidentIdParam INT UNSIGNED,
 	IN userIdParam INT UNSIGNED
@@ -530,6 +511,7 @@ SELECT
 	incidentId,
 	userId,
 	date,
+	notes,
 	vehicleLicensePlate,
 	vehicleBrand,
 	vehicleModel,
@@ -538,18 +520,16 @@ SELECT
 	created,
 	modified
 FROM
-	beenbumped.t_incidents
+	t_incidents
 WHERE incidentId = incidentIdParam
 	AND userId = userIdParam;
 
 END$$
-DELIMITER ;
 
 -- --------------------------------------------------------------------------------
 -- Routine DDL
 -- Note: comments before and after the routine body will not be stored by the server
 -- --------------------------------------------------------------------------------
-DELIMITER $$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getIncidentHistory`(
 	IN userId INT,
@@ -576,17 +556,16 @@ ELSE
 END IF;
 
 PREPARE STMT FROM
-'SET @numberOfLines = (SELECT count(*) FROM beenbumped.t_incidents WHERE userId = ?)';
+'SET @numberOfLines = (SELECT count(*) FROM t_incidents WHERE userId = ?)';
 EXECUTE STMT USING @userIdInput;
 set numberOfLines = @numberOfLines;
 
 PREPARE STMT FROM 
 'SELECT incidentId, userId, date, notes, location, vehicleLicensePlate, vehicleBrand, vehicleModel, driverPersonId, ownerPersonId
-FROM beenbumped.t_incidents
+FROM t_incidents
 WHERE userId = ?
 LIMIT ?,?';
 
 EXECUTE STMT USING @userIdInput,@skip,@rows;
 
 END$$
-DELIMITER ;

@@ -1,10 +1,13 @@
--- create tables
-DROP TABLE IF EXISTS beenbumped.t_users;
-DROP TABLE IF EXISTS beenbumped.t_persons;
-DROP TABLE IF EXISTS beenbumped.t_authenticate;
-DROP TABLE IF EXISTS beenbumped.t_incidents;
+-- DELIMITER $$
 
-CREATE TABLE IF NOT EXISTS beenbumped.t_persons (
+-- drop the existing tables
+DROP TABLE IF EXISTS t_users$$
+DROP TABLE IF EXISTS t_persons$$
+DROP TABLE IF EXISTS t_authenticate$$
+DROP TABLE IF EXISTS t_incidents$$
+
+-- create tables
+CREATE TABLE IF NOT EXISTS t_persons (
 	personId INT UNSIGNED NOT NULL AUTO_INCREMENT ,
 	email VARCHAR(320) NOT NULL ,
 	firstName VARCHAR(30) NOT NULL ,
@@ -25,9 +28,9 @@ CREATE TABLE IF NOT EXISTS beenbumped.t_persons (
 	created DATETIME NOT NULL ,
 	modified DATETIME NOT NULL ,
  PRIMARY KEY (personId) ,
- UNIQUE INDEX personId_UNIQUE (personId ASC));
+ UNIQUE INDEX personId_UNIQUE (personId ASC))$$
  
-CREATE TABLE IF NOT EXISTS beenbumped.t_users (
+CREATE TABLE IF NOT EXISTS t_users (
 	userId INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	personId INT UNSIGNED NOT NULL,
 	username VARCHAR(100) NOT NULL,
@@ -39,9 +42,9 @@ CREATE TABLE IF NOT EXISTS beenbumped.t_users (
 	UNIQUE INDEX userId_UNIQUE (userId ASC),
 	UNIQUE INDEX personId_UNIQUE (personId ASC),
 	UNIQUE INDEX username_UNIQUE (username ASC)
-);
+)$$
 
-CREATE TABLE IF NOT EXISTS beenbumped.t_authenticate (
+CREATE TABLE IF NOT EXISTS t_authenticate (
 	authId INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	userId INT UNSIGNED NOT NULL,
 	authHash VARCHAR(100) NOT NULL,
@@ -49,9 +52,9 @@ CREATE TABLE IF NOT EXISTS beenbumped.t_authenticate (
 	created DATETIME NOT NULL,
 	modified DATETIME NOT NULL,
  PRIMARY KEY (authId),
- UNIQUE INDEX authId_UNIQUE (authId ASC));
+ UNIQUE INDEX authId_UNIQUE (authId ASC))$$
  
- CREATE TABLE IF NOT EXISTS beenbumped.t_incidents (
+ CREATE TABLE IF NOT EXISTS t_incidents (
 	incidentId INT UNSIGNED NOT NULL AUTO_INCREMENT,
 	userId INT UNSIGNED NOT NULL,
 	date DATETIME NOT NULL,
@@ -65,4 +68,4 @@ CREATE TABLE IF NOT EXISTS beenbumped.t_authenticate (
 	created DATETIME NOT NULL,
 	modified DATETIME NOT NULL,
  PRIMARY KEY (incidentId),
- UNIQUE INDEX incidentId_UNIQUE (incidentId ASC));
+ UNIQUE INDEX incidentId_UNIQUE (incidentId ASC))$$

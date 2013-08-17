@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import app.Config;
+
 public class MySql {
 
 	static private MySql instance = null;
@@ -13,10 +15,11 @@ public class MySql {
 	// protected so creation is only handled through getInstance
 	protected MySql() {
 		try {
+			Config c = Config.getInstance();
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			//Class.forName("com.mysql.jdbc.Driver");
 			try {
-				connection = DriverManager.getConnection("jdbc:mysql://localhost/beenbumped?user=root&password=bitter");
+				connection = DriverManager.getConnection("jdbc:mysql://"+c.getDbHost()+"/"+c.getDbSchema()+"?user="+c.getDbUser()+"&password="+c.getDbPassword());
 			} catch (SQLException e) {
 				System.out.print("\ncan't get connection\n");
 				e.printStackTrace();

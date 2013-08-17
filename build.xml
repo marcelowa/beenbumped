@@ -1,16 +1,13 @@
 <?xml version="1.0" ?> 
 <project name="beenbumped" default="war">
-
-	<property name="app.name" value="been" />
-	<property name="tomcat.dir" location="D:\tomcat" />
+	
 	<property name="web-inf.dir" location="WebContent/WEB-INF" />
 	<property name="src.dir" location="src" />
 	<property name="build.dir" location="build/classes" />
 	<property name="dist.dir" location="dist" />
+	<property file="${src.dir}/config.properties"  />
 	
-	<presetdef name="javac">
-	    <javac includeantruntime="false" />
-	</presetdef>
+	<presetdef name="javac"><javac includeantruntime="false" /></presetdef>
 	
 	<path id="compile.classpath">
 		<fileset includes="*.jar" dir="${web-inf.dir}/lib" />
@@ -22,12 +19,14 @@
 		<mkdir dir="${build.dir}"/>
 		<mkdir dir="${dist.dir}"/>
 	</target>
-	
+		
 	<target name="compile" depends="init" >
 		<javac destdir="${build.dir}" debug="true" srcdir="${src.dir}">
 			<classpath refid="compile.classpath"/>
 		</javac>
 	</target>
+	
+
 	
 	<target name="war" depends="compile">
 		<war destfile="${dist.dir}/${app.name}.war" webxml="${web-inf.dir}/web.xml">
@@ -40,6 +39,23 @@
 	<target name="clean">
 		<delete dir="${build.dir}" />
 		<delete dir="${dist.dir}" />
+	</target>
+	
+	<target name="create-db">
+ 		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://${db.host}/mysql" userid="${db.user}" password="${db.password}" >
+ 			<classpath refid="compile.classpath"/>
+ 			<transaction>
+ 				CREATE DATABASE IF NOT EXISTS ${db.schema}
+ 			  </transaction>
+		  </sql>
+	</target>
+		
+	<target name="db" depends="create-db">
+ 		<sql driver="com.mysql.jdbc.Driver" url="jdbc:mysql://${db.host}/${db.schema}" userid="${db.user}" password="${db.password}" delimiter="$$">
+ 			<classpath refid="compile.classpath"/>
+			<transaction src="SQL/tables.sql"/>
+			<transaction src="SQL/stored-procedures.sql"/>
+		  </sql>
 	</target>
 	
 </project>

@@ -18,15 +18,20 @@ Prerequisites:
 Installation:
 ---
 
-1) edit the build xml to reflect the location of your Tomcat server:
+1) edit the configuration to reflect your mysql and tomcat needs, the configuration is located at src/config.properties file
 
-    <project name="beenbumped" default="war">
-        ...
-        <property name="tomcat.dir" location="D:\tomcat" />
-        ...
-    </project>
+    ...
+    db.user=username
+    db.password=password
+    db.host=host
+    ...
+    tomcat.dir=tomcat-location-in-the-file-system
     
-2) execute ant to build beenbumped.war file:
+2) execute ant db to build the database structure and procedures
+
+    ant db    
+    
+3) execute ant to build the beenbumped.war file:
 
     ant
 
@@ -34,7 +39,7 @@ beenbumped.war file will be located in the following location:
 
     dist/beenbumped.war 
 
-3) copy beenbumped.war file into your tomcat webapps folder
+4) copy beenbumped.war file into your tomcat webapps folder
 
 
 General Usage:
@@ -90,6 +95,7 @@ the following examples will demonstrate the HTTP request and the HTTP response o
 
 
 #### New User example:
+
 Request:
 
     POST /beenbumped/rest/user HTTP/1.1
@@ -171,6 +177,7 @@ As noted above, an already existing user can receive the User object resource us
 * password(string) [required]
 
 #### example:
+
 Request:
 
     GET /beenbumped/rest/user?username=name@example.com&password=qwe123 HTTP/1.1
@@ -254,11 +261,11 @@ To get an existing incident a GET request can be made in the following format
 * authHash(int) [required]
 
 #### example:
+
 Request:
 
     GET /beenbumped/rest/incident/19?userId=4&authHash=*DCE2A329760E1C0F6343BEEFC68524B287F44CB6 HTTP/1.1
     Accept: application/json
-
 
 Response:
 
@@ -321,13 +328,15 @@ an authenticated user can retrieve his existing incidents list with the followin
 #### Arguments (square brackets in the URI Path):
 * userId(int) [required]
 * authHash(string) [required]
+* linesInPage (int) [optional limit the number of incident results to that number]
+* page (int) [optional if linesInPage is set page will retrieve {linesInPage} results starting from {linesInPage}*{page}]
 
 #### example:
+
 Request:
 
     GET /beenbumped/rest/incident/history?authHash=*DCE2A329760E1C0F6343BEEFC68524B287F44CB6&userId=4 HTTP/1.1
     Accept: application/json
-
 
 Response:
 
@@ -335,8 +344,9 @@ Response:
     Content-Type: application/json
     
     {
-        incidents:[ /* an array of incident(s)*/
-            {...[an Incident object same format as Incident-Get]},
-            ...
-        ],
-        "totalLines":10
+        incidents:[ /* an array of incident(s) same structure as in Incident-Get */ ],
+        "totalLines":10 //total incidents
+    }
+
+
+

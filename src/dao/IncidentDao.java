@@ -45,6 +45,7 @@ public class IncidentDao {
 			incident.setIncidentId(result.getInt("incidentId"));
 			incident.setUserId(result.getInt("userId"));
 			incident.setDate(new Date(result.getTimestamp("date").getTime()));
+			incident.setNotes(result.getString("notes"));
 			incident.setVehicleLicensePlate(result.getString("vehicleLicensePlate"));
 			incident.setVehicleBrand(result.getString("vehicleBrand"));
 			incident.setVehicleModel(result.getString("vehicleModel"));
