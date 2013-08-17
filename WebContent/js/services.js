@@ -12,7 +12,7 @@ angular.module("beenbumpedServices", ["ngResource"]).config(function ($httpProvi
 })
 
 .factory("User", function($resource, $http){
-	return $resource("/beenbumped/rest/user/:userId");
+	return $resource("rest/user/:userId");
 })
 
 /**
@@ -46,7 +46,7 @@ angular.module("beenbumpedServices", ["ngResource"]).config(function ($httpProvi
 		return incident;
 	};
 	
-	return $resource("/beenbumped/rest/incident/:incidentId", {}, {
+	return $resource("rest/incident/:incidentId", {}, {
 		
 		get : {
 			method:'GET',

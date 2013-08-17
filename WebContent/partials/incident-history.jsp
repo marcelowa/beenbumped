@@ -10,8 +10,7 @@
 	</div>
 	<table class="table table-striped">
 		<tr  ng-repeat="incident in incidentsDisplay">
-			<td><div>{{incident.incidentId}}</div></td>
-			<td><div>{{incident.text}}</div></td>
+			<td><div><small>{{incident.incidentDate}}</small> {{incident.text}}</div></td>
 			<td><div><a class="btn btn-small btn-primary" href="{{incident.url}}">edit</a></div></td>
 		</tr>
 	</table>

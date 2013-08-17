@@ -1,5 +1,5 @@
 <div class="user-new">
-	<h1>New user</h1>
+	<h1>Register</h1>
 	<form name="user-form" class="form-horizontal" >
 		<div class="navbar navbar-fixed-bottom">
 			<div class="navbar-inner">

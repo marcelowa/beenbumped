@@ -1,5 +1,5 @@
 <div class="user-edit">
-	<h1>Edit User</h1>
+	<h1>User</h1>
 	<form name="user-form" class="form-horizontal" >
 		<div class="navbar navbar-fixed-bottom">
 			<div class="navbar-inner">

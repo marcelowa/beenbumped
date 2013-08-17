@@ -165,8 +165,7 @@ function IncidentHistoryCtrl($scope, $location, $filter, Incident, UserProvider,
 			for (var i=0,l = $scope.incidents.incidents.length;i<l;i++) {
 				incident = $scope.incidents.incidents[i];
 				incidentTextArr = [
-				                   incident.date || null
-				                   , incident.vehicleBrand
+				                   incident.vehicleBrand
 				                   , incident.vehicleModel || null
 				                   , incident.driverFirstName  || null
 				                   , incident.driverLastName  || null
@@ -175,6 +174,7 @@ function IncidentHistoryCtrl($scope, $location, $filter, Incident, UserProvider,
 				                   , incident.notes  || null
 				                   ];
 				$scope.incidentsDisplay.push({
+					incidentDate : incident.date.substring(0,10),
 					incidentId : incident.incidentId,
 					text : incidentTextArr.join(' '),
 					url : '#!/incident/edit/'+incident.incidentId
