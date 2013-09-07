@@ -26,13 +26,21 @@
 		</javac>
 	</target>
 	
+	<target name="copy-meta">
+		<copy todir="${build.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*.xml" />
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+	</target>
 
 	
-	<target name="war" depends="compile">
+	<target name="war" depends="compile, copy-meta">
 		<war destfile="${dist.dir}/${app.name}.war" webxml="${web-inf.dir}/web.xml">
 			<fileset dir="WebContent"/>
 			<lib dir="${web-inf.dir}/lib"/>
-			<classes dir="${build.dir}"/>
+			<classes dir="${build.dir}" />
 		</war>
 	</target>
 	
