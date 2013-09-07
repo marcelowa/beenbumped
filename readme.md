@@ -11,6 +11,7 @@ The project actually contains two application:
 
 Prerequisites:
 ---
+* A working Java SE 1.7 installation
 * A working Apache Tomcat 7 web server installation <http://tomcat.apache.org/download-70.cgi>
 * A working MySQL server
 * A working Ant installation <http://ant.apache.org/bindownload.cgi>
