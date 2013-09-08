@@ -1,4 +1,6 @@
+/* src/resources/ResourceExceptionMapper.java */
 package resources;
+
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;

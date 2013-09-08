@@ -1,3 +1,4 @@
+/* src/resources/ResourceException.java */
 package resources;
 
 import entities.ResourceError;

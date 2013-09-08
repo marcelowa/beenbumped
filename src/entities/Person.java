@@ -1,7 +1,7 @@
+/* src/entities/Person.java */
 package entities;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
 
 /**Represent a person, can be us or another person in an incident*/
 @XmlRootElement

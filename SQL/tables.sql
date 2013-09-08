@@ -1,3 +1,4 @@
+-- SQL/tables.sql
 -- DELIMITER $$
 
 -- drop the existing tables

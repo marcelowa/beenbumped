@@ -1,3 +1,4 @@
+/* src/app/Config.java */
 package app;
 
 import java.util.Properties;
@@ -5,7 +6,6 @@ import java.util.Properties;
 public class Config {
 
 	static private Config instance = null;
-	
 	private Properties config;
 	private String appName;
 	private String dbUser;

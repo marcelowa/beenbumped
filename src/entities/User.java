@@ -1,3 +1,4 @@
+/* src/entities/User.java */
 package entities;
 
 import javax.xml.bind.annotation.XmlRootElement;

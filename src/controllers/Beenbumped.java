@@ -1,13 +1,12 @@
+/* src/controllers/Beenbumped.java */
 package controllers;
 
 import java.io.IOException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 /**Active the JSON for the main web page*/
 public class Beenbumped extends HttpServlet {

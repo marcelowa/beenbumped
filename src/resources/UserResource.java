@@ -1,7 +1,7 @@
+/* src/resources/UserResource.java */
 package resources;
 
 import java.net.URI;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -16,8 +16,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-
-
 import dao.UserDao;
 import entities.ResourceError;
 import entities.User;

@@ -1,9 +1,9 @@
+/* src/db/MySql.java */
 package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 import app.Config;
 
 public class MySql {

@@ -1,10 +1,9 @@
+/* src/entities/IncidentPage.java */
 package entities;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-
-
 import entities.Incident;
 
 /**Represent a single page (web page) of incidents*/
