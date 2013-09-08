@@ -93,8 +93,6 @@ the following examples will demonstrate the HTTP request and the HTTP response o
 * insuranceNumber (string)
 
 
-
-
 #### New User example:
 
 Request:
@@ -117,6 +115,7 @@ The response after saving the user contains the location to the User resource cu
 
 if we redirect to the Location header received in the last example we will get in response the user object in the response
 
+![Create a New User](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=Q2xpZW50LT5Vc2VyUmVzb3VyY2U6IEh0dHAgUmVxdWVzdCBTYXZlIFVzZXIKABkMACMQQ29uc3RydWN0ACYFIChFbnRpdHkpACETRGFvIDoARw9EYW8AdBBTYXZlZABkFACBLQY6IEhUVFAgUmVzcG9uc2UgTGluayB0bwAsCyAAgUgICg&s=napkin)
 
 ### User-Get: <a id="userget">[userget]</a> ###
 after user creation or after user is already logged in (explained later in user authenticate), a user resource can be retrieved using the following API:
@@ -164,6 +163,7 @@ Response:
         "authHash":"*DCE2A329760E1C0F6343BEEFC68524B287F44CB6"
     }
 
+![Get an Exisiting User Data](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=Q2xpZW50LT5Vc2VyUmVzb3VyY2U6IEh0dHAgUmVxdWVzdCBVc2VyCgAUDAAoBkRhbzogQ2hlY2sgaWYAIAUgaXMgQXV0aG9yaXplZCB0byBnZQAjHCA6IGdldEJ5SWQAWgVEYW8AeBByZXR1cm4AbhQAgTIGOiBIVFRQIFJlc3BvbnNlAIEABkVudGl0eSAoWE1ML0pTT04p&s=napkin)
 
 ### User-Authenticate: <a id="userauth">[userauth]</a> ###
 As noted above, an already existing user can receive the User object resource using the authenticate API.
@@ -185,6 +185,8 @@ Request:
     Accept: application/json
 
 Response: see [User-Get](#userget)
+
+![Authenticate (login) with an Existing User](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=Q2xpZW50LT5Vc2VyUmVzb3VyY2U6IEhUVFAgUmVxdWVzdCBBdXRoZW50aWNhdGUKABwMADAGRGFvOgASEkRhbwBFEFVzZXIgRW50aXR5ADgPAIB_BgBuCXNwb25zZQAkDCAoWE1ML0pzb24p&s=napkin)
 
 ### Incident-Save: <a id="incidentsave">[incidentsave]</a> ###
 
@@ -247,6 +249,7 @@ Response:
     Location: http://localhost:8080/beenbumped/rest/incident/19?userId=4&authHash=*DCE2A329760E1C0F6343BEEFC68524B287F44CB6
     Content-Length: 0
 
+![Create (or Edit an Existing) Incident](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=Q2xpZW50LT5JbmNpZGVudFJlc291cmNlOiBIdHRwIFJlcXVlc3QgU2F2ZSAAHAgKAB0QLT5Vc2VyRGFvOiBDaGVjayBpZiBVc2VyIGlzIEF1dGhvcml6ZWQgdG8AJyEAdRJDb25zdHJ1Y3QAdgkoRW50aXR5KQAkG0RhbyA6AIEeF0RhbwCBWxRTYXZlZACBRxwAgiQGOiBIVFRQIFJlc3BvbnNlIExpbmsAgVEIADUKIACCPwg&s=napkin)
 
 ### Incident-Get: <a id="incidentget">[incidentget]</a> ###
 To get an existing incident a GET request can be made in the following format
@@ -318,6 +321,8 @@ Response:
         "date":"2013-08-17 12:20"
     }
 
+![Get an Exisiting Incident Data](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=Q2xpZW50LT5JbmNpZGVudFJlc291cmNlOiBIdHRwIFJlcXVlc3QgABcICgAYEC0-VXNlckRhbzogQ2hlY2sgaWYgVXNlciBpcyBBdXRob3JpemVkIHRvIGdlACodAHkIRGFvIDogZ2V0QnlJZABmCURhbwCBEBRyZXR1cm4AgQIcAIFaBjogSFRUUCBSZXNwb25zZQCBRgkgRW50aXR5IChYTUwvSlNPTik&s=napkin)
+
 ### Incident-History: <a id="incidenthistory">[incidenthistory]</a> ###
 an authenticated user can retrieve his existing incidents list with the following API
 
@@ -348,6 +353,10 @@ Response:
         incidents:[ /* an array of incident(s) same structure as in Incident-Get */ ],
         "totalLines":10 //total incidents
     }
+
+![Get User Incidents History (Incident Collection)](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=Q2xpZW50LT5JbmNpZGVudFJlc291cmNlOiBIdHRwIFJlcXVlc3QgSGlzdG9yeSAob2YgaQAkB3MpCgAmEC0-VXNlckRhbzogQ2hlY2sgaWYgVXNlciBpcyBBdXRob3JpemVkIHRvIGdldCAAbAhzADUTAIEICERhbyA6IGdldACBGQgAgQEJYnkgdXNlcklkAH0KRGFvAIE2FHJldHVybgBmCVBhZ2UgKENvbGxlY3Rpb24gb2YAgQIJIEVudGl0aWUAgUcVAIImBjogSFRUUCBSZXNwb25zZQBJDgA6BXkgKFhNTC9KU09OKQo&s=napkin)
+
+
 
 
 
